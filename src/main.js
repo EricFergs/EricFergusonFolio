@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import gsap from "gsap";
 
 const canvas = document.querySelector("#experience-canvas")
 const sizes = {
@@ -12,6 +13,9 @@ const sizes = {
 
 const yAxisFans = []
 let chair
+let frieren
+let LinkedIn
+let Github
 //Loaders
 const textureLoader = new THREE.TextureLoader();
 const dracoLoader = new DRACOLoader();
@@ -24,6 +28,7 @@ const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const raycasterObjects = []
 let currentIntersects = []
+let currentHoveredObject = null
 
 const socialLinks = {
     "Github" : "https://github.com/EricFergs",
@@ -64,6 +69,18 @@ loader.load("/models/Room_Final_Compressed.glb", (glb) => {
                     if(child.name.includes("Chair")){
                         chair = child
                         child.userData.initialRotation = new THREE.Euler().copy(child.rotation);
+                    }
+                    if(child.name.includes("Frieren")){
+                        frieren = child
+                        child.userData.initialScale = new THREE.Vector3().copy(child.scale);
+                    }
+                    if(child.name.includes("Github")){
+                        LinkedIn = child
+                        child.userData.initialScale = new THREE.Vector3().copy(child.scale);
+                    }
+                    if(child.name.includes("LinkedIn")){
+                        Github = child
+                        child.userData.initialScale = new THREE.Vector3().copy(child.scale);
                     }
                     if (child.name.includes("Target")) {
                         raycasterObjects.push(child);
@@ -155,6 +172,29 @@ window.addEventListener("click",(e) =>{
     }
 })
 
+function playHoverAnimation(object, isHovering){
+    let scale = 1.2;
+    gsap.killTweensOf(object.scale);
+    gsap.killTweensOf(object.rotation);
+    gsap.killTweensOf(object.position);
+    if (isHovering) {
+            // Scale animation for all objects
+        gsap.to(object.scale, {
+            x: object.userData.initialScale.x * scale,
+            y: object.userData.initialScale.y * scale,
+            z: object.userData.initialScale.z * scale,
+            duration: 0.5,
+            ease: "back.out(2)",
+    })}else{
+        // Reset scale for all objects
+        gsap.to(object.scale, {
+          x: object.userData.initialScale.x,
+          y: object.userData.initialScale.y,
+          z: object.userData.initialScale.z,
+          duration: 0.3,
+          ease: "back.out(2)",
+    })}
+}
 
 const render = (timestamp) => {
     controls.update()
@@ -176,12 +216,29 @@ const render = (timestamp) => {
 
     raycaster.setFromCamera( pointer, camera );
 	currentIntersects = raycaster.intersectObjects( raycasterObjects );
-	for ( let i = 0; i < currentIntersects.length; i ++ ) {
-	}
+	
     if(currentIntersects.length>0){
         const currentIntersectsObject = currentIntersects[0].object
         document.body.style.cursor = "pointer"
+        if (currentIntersectsObject.name.includes("Frieren") || currentIntersectsObject.name.includes("Github") || currentIntersectsObject.name.includes("LinkedIn")){
+            if(currentIntersectsObject !== currentHoveredObject){
+                if (currentHoveredObject) {
+                    playHoverAnimation(currentHoveredObject, false);
+                }
+                currentHoveredObject = currentIntersectsObject
+                playHoverAnimation(currentHoveredObject, true);
+            }
+        }else{
+            if (currentHoveredObject){
+                playHoverAnimation(currentHoveredObject, false);
+                currentHoveredObject = null;
+            }
+        }
     }else{
+        if (currentHoveredObject) {
+            playHoverAnimation(currentHoveredObject, false);
+            currentHoveredObject = null;
+        }
         document.body.style.cursor = "default"
     }
     renderer.render( scene, camera );
