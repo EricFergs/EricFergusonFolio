@@ -10,6 +10,8 @@ const sizes = {
     height: window.innerHeight
 }
 
+const yAxisFans = []
+let chair
 //Loaders
 const textureLoader = new THREE.TextureLoader();
 const dracoLoader = new DRACOLoader();
@@ -32,6 +34,7 @@ const textureMap = {
 loader.load("/models/Room_Final_Compressed.glb", (glb) => {
     glb.scene.traverse((child) => {
         if (child.isMesh) {
+            
             child.visible = true;
             Object.keys(textureMap).forEach((key) => {
                 if (child.name.includes(key)){
@@ -43,6 +46,13 @@ loader.load("/models/Room_Final_Compressed.glb", (glb) => {
                     child.material = material
                     if (child.material.map){
                         child.material.map.minFilter = THREE.LinearFilter
+                    }
+                    if(child.name.includes("Fan")){
+                        yAxisFans.push(child)
+                    }
+                    if(child.name.includes("Chair")){
+                        chair = child
+                        child.userData.initialRotation = new THREE.Euler().copy(child.rotation);
                     }
                 }
                 if(child.name.includes("Glass")){
@@ -59,6 +69,7 @@ loader.load("/models/Room_Final_Compressed.glb", (glb) => {
                         lightIntensity: 1,
                         exposure: 1,  
                     })
+                
                 }
             })
         }
@@ -85,7 +96,7 @@ camera.position.set(14.351001566716521,6.903370258003837,10.906939879591045)
 
 
 const controls = new OrbitControls( camera, renderer.domElement );
-controls.minDistance = 8
+controls.minDistance = 9
 controls.maxDistance = 17
 controls.minPolarAngle = 0
 controls.maxPolarAngle = Math.PI/2
@@ -111,8 +122,23 @@ window.addEventListener("resize", ()=>{
 
 
 
-const render = () => {
+const render = (timestamp) => {
     controls.update()
+
+    yAxisFans.forEach(fan => {
+        fan.rotation.x += 0.03
+    })
+    if(chair) {
+        const time = timestamp * 0.001;
+        const baseAmplitude = Math.PI / 8;
+    
+        const rotationOffset =
+          baseAmplitude *
+          Math.sin(time * 0.5) *
+          (1 - Math.abs(Math.sin(time * 0.5)) * 0.3);
+    
+        chair.rotation.y = chair.userData.initialRotation.y + rotationOffset;
+    }
     
     renderer.render( scene, camera );
 
