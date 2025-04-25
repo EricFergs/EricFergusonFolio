@@ -128,11 +128,11 @@ camera.position.set(14.351001566716521,6.903370258003837,10.906939879591045)
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.minDistance = 9
-controls.maxDistance = 17
-controls.minPolarAngle = 0
-controls.maxPolarAngle = Math.PI/2
+controls.maxDistance = 20
+controls.minPolarAngle = Math.PI/6
+controls.maxPolarAngle = Math.PI/2.5
 controls.minAzimuthAngle = 0
-controls.maxAzimuthAngle = Math.PI/2
+controls.maxAzimuthAngle = Math.PI/2.1
 controls.update();
 controls.enableDamping = true; 
 controls.dampingFactor = 0.05;
