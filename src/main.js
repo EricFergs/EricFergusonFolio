@@ -20,6 +20,17 @@ dracoLoader.setDecoderPath( '/draco/' );
 const loader = new GLTFLoader();
 loader.setDRACOLoader(dracoLoader);
 
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+const raycasterObjects = []
+let currentIntersects = []
+
+const socialLinks = {
+    "Github" : "https://github.com/EricFergs",
+    "LinkedIn" : "https://www.linkedin.com/in/eric-ferguson-10687225b/"
+}
+
+
 const environmentMap = new THREE.CubeTextureLoader()
 	.setPath( 'textures/skybox/' )
 	.load(['px.webp','nx.webp','py.webp','ny.webp','pz.webp','nz.webp']);
@@ -53,6 +64,9 @@ loader.load("/models/Room_Final_Compressed.glb", (glb) => {
                     if(child.name.includes("Chair")){
                         chair = child
                         child.userData.initialRotation = new THREE.Euler().copy(child.rotation);
+                    }
+                    if (child.name.includes("Target")) {
+                        raycasterObjects.push(child);
                     }
                 }
                 if(child.name.includes("Glass")){
@@ -120,6 +134,26 @@ window.addEventListener("resize", ()=>{
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
+window.addEventListener("mousemove", (e) => {
+    pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+})
+
+window.addEventListener("click",(e) =>{
+    if(currentIntersects.length > 0){
+        const object = currentIntersects[0].object
+
+        Object.entries(socialLinks).forEach(([key, url]) => {
+            if(object.name.includes(key)){
+                const newWindow = window.open()
+                newWindow.opener = null
+                newWindow.location = url
+                newWindow.target= "_blank"
+                newWindow.rel = "noopener noreferrer"
+            }
+        })
+    }
+})
 
 
 const render = (timestamp) => {
@@ -139,7 +173,17 @@ const render = (timestamp) => {
     
         chair.rotation.y = chair.userData.initialRotation.y + rotationOffset;
     }
-    
+
+    raycaster.setFromCamera( pointer, camera );
+	currentIntersects = raycaster.intersectObjects( raycasterObjects );
+	for ( let i = 0; i < currentIntersects.length; i ++ ) {
+	}
+    if(currentIntersects.length>0){
+        const currentIntersectsObject = currentIntersects[0].object
+        document.body.style.cursor = "pointer"
+    }else{
+        document.body.style.cursor = "default"
+    }
     renderer.render( scene, camera );
 
     window.requestAnimationFrame(render)
