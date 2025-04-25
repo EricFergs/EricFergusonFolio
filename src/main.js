@@ -18,13 +18,18 @@ dracoLoader.setDecoderPath( '/draco/' );
 const loader = new GLTFLoader();
 loader.setDRACOLoader(dracoLoader);
 
+const environmentMap = new THREE.CubeTextureLoader()
+	.setPath( 'textures/skybox/' )
+	.load(['px.webp','nx.webp','py.webp','ny.webp','pz.webp','nz.webp']);
+
 const textureMap = {
-    One: "/textures/SuccesfulBakeOne.webp",
-    Two: "/textures/SuccesfulBakeTwo.webp",
-    Three: "/textures/SuccesfulBakeThree.webp",
-    Four: "/textures/SuccesfulBakeFour.webp"
+    One: "/textures/TrueBakeOne.webp",
+    Two: "/textures/TrueBakeTwo.webp",
+    Three: "/textures/TrueBakeThree.webp",
+    Four: "/textures/TrueBakeFour.webp",
+    Background: "/textures/TrueBakeFive.webp"
 }
-loader.load("/models/Room_Port_compressed.glb", (glb) => {
+loader.load("/models/Room_Final_Compressed.glb", (glb) => {
     glb.scene.traverse((child) => {
         if (child.isMesh) {
             child.visible = true;
@@ -42,7 +47,7 @@ loader.load("/models/Room_Port_compressed.glb", (glb) => {
                 }
                 if(child.name.includes("Glass")){
                     child.material = new THREE.MeshPhysicalMaterial({
-                        
+                        envMap : environmentMap,
                         transmission: 1,
                         opacity: 1,
                         metalness: 0,
@@ -52,8 +57,7 @@ loader.load("/models/Room_Port_compressed.glb", (glb) => {
                         specularIntensity: 1,
                         envMapIntensity: 1,
                         lightIntensity: 1,
-                        exposure: 1,
-                        
+                        exposure: 1,  
                     })
                 }
             })
@@ -63,26 +67,36 @@ loader.load("/models/Room_Port_compressed.glb", (glb) => {
     })
     scene.add(glb.scene)
 })
+
+
+
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xf0f0f0);
+scene.background = new THREE.Color(0xd3dddc);
 const camera = new THREE.PerspectiveCamera( 
     75, 
     sizes.width / sizes.height, 
     0.1,
     1000 );
-camera.position.z = 5;
 const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
 renderer.setSize( sizes.width, sizes.height );
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-
-
+camera.position.set(14.351001566716521,6.903370258003837,10.906939879591045)
 
 
 
 const controls = new OrbitControls( camera, renderer.domElement );
+controls.minDistance = 8
+controls.maxDistance = 17
+controls.minPolarAngle = 0
+controls.maxPolarAngle = Math.PI/2
+controls.minAzimuthAngle = 0
+controls.maxAzimuthAngle = Math.PI/2
 controls.update();
 controls.enableDamping = true; 
 controls.dampingFactor = 0.05;
+controls.target.set(1.4315080506416726,1.94168476813741,-2.589729659045444)
+
+
 
 window.addEventListener("resize", ()=>{
     sizes.width = window.innerWidth
@@ -95,9 +109,11 @@ window.addEventListener("resize", ()=>{
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
+
+
 const render = () => {
     controls.update()
-
+    
     renderer.render( scene, camera );
 
     window.requestAnimationFrame(render)
