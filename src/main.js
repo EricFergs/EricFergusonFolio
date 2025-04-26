@@ -5,7 +5,7 @@ import { createCamera } from './camera.js';
 import { setupControls } from './controls.js';
 import { setupLoaders } from './loaders.js';
 import { playHoverAnimation } from './animations.js';
-
+import { createOutlinePass } from './OutlinePass.js';
 
 const canvas = document.querySelector("#experience-canvas");
 const sizes = {
@@ -27,6 +27,9 @@ const pointer = new THREE.Vector2();
 const raycasterObjects = [];
 let currentIntersects = [];
 let currentHoveredObject = null;
+
+const { composer, outlinePass } = createOutlinePass(renderer, scene, camera);
+
 
 const textureMap = {
     One: "/textures/TrueBakeOne.webp",
@@ -72,7 +75,9 @@ gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
                         child.userData.initialScale = new THREE.Vector3().copy(child.scale);
                     }
                     if (child.name.includes("Target")) {
+                        child.geometry.computeVertexNormals();
                         raycasterObjects.push(child);
+                        outlinePass.selectedObjects.push(child)
                     }
                 }
                 if(child.name.includes("Glass")){
@@ -184,7 +189,8 @@ const render = (timestamp) => {
         }
         document.body.style.cursor = "default"
     }
-    renderer.render( scene, camera );
+    // renderer.render( scene, camera );
+    composer.render();
 
     window.requestAnimationFrame(render)
 }
