@@ -142,7 +142,7 @@
 
 .circular-button {
   position: absolute;
-  display: block;
+  display: none;
   bottom: 50px;
   left: 50px;
   width: 100px;
@@ -159,8 +159,8 @@
   transition: opacity 1s, visibility 1s, background-size 0.2s ease-in-out;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
   z-index: 2;
-  background-image: url("../static/assets/svg/arrow-back.svg");
-  background-size: 70%;
+  background-image: url("../public/images/back-arrow-icon.svg");
+  background-size: 60%;
   background-position: center;
   background-repeat: no-repeat;
 }

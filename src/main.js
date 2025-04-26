@@ -7,6 +7,7 @@ import { setupLoaders } from './loaders.js';
 import { playHoverAnimation } from './animations.js';
 import { createOutlinePass } from './OutlinePass.js';
 import gsap from "gsap"
+import { pass } from 'three/tsl';
 
 const canvas = document.querySelector("#experience-canvas");
 const sizes = {
@@ -14,18 +15,40 @@ const sizes = {
     height: window.innerHeight
 };
 
+let modalView = false;
 const modals = {
     AboutMe: document.querySelector(".modal.contact")
 };
+
+
 document.querySelectorAll(".modal-exit-button").forEach(button=>{
     button.addEventListener("click",(e)=>{
         const modal = e.target.closest(".modal");
         hideModal(modal);
     })
 })
-document.getElementById("contact_button").addEventListener("click", (e) => {
-    showModal(modals.AboutMe);
+const backButton = document.getElementById("back-button")
+backButton.addEventListener("click", (e) => {
+    backButton.style.display = "none";
+    const initialCameraPos = new THREE.Vector3(14.351001566716521, 6.903370258003837, 10.906939879591045);
+    const initialTarget = new THREE.Vector3(1.43, 1.94, -2.58);
+    gsap.to(camera.position, {
+        duration: 2,
+        x: initialCameraPos.x,
+        y: initialCameraPos.y,
+        z: initialCameraPos.z,
+        onUpdate: () => {
+          camera.lookAt(initialTarget);
+        },
+        onComplete: () => {
+            controls.target.copy(initialTarget);
+            controls.enabled = true;
+            modalView = false;
+        }
+    });
+    
 });
+
 const showModal = (modal) => {
     modal.style.display = "block";
 
@@ -180,7 +203,8 @@ window.addEventListener("click",(e) =>{
 
         if (object.name.includes("Frieren")){
             controls.enabled = false;
-
+            backButton.style.display = "block";
+            modalView = true;
             const objectPosition = new THREE.Vector3();
             object.getWorldPosition(objectPosition);
             objectPosition.y += 0.8
@@ -206,11 +230,12 @@ window.addEventListener("click",(e) =>{
 
 
 const render = (timestamp) => {
-    controls.update()
-
+    if(!modalView){
+        controls.update();
+    };
     yAxisFans.forEach(fan => {
-        fan.rotation.x += 0.03
-    })
+        fan.rotation.x += 0.03;
+    });
     if(chair) {
         const time = timestamp * 0.001;
         const baseAmplitude = Math.PI / 8;
@@ -221,7 +246,7 @@ const render = (timestamp) => {
           (1 - Math.abs(Math.sin(time * 0.5)) * 0.3);
     
         chair.rotation.y = chair.userData.initialRotation.y + rotationOffset;
-    }
+    };
 
     raycaster.setFromCamera( pointer, camera );
 	currentIntersects = raycaster.intersectObjects( raycasterObjects );
@@ -253,7 +278,7 @@ const render = (timestamp) => {
     // renderer.render( scene, camera );
     composer.render();
     
-    window.requestAnimationFrame(render)
+    window.requestAnimationFrame(render);
 }
 
-render()
+render();
