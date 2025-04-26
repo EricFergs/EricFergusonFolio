@@ -6,11 +6,44 @@ import { setupControls } from './controls.js';
 import { setupLoaders } from './loaders.js';
 import { playHoverAnimation } from './animations.js';
 import { createOutlinePass } from './OutlinePass.js';
+import gsap from "gsap"
 
 const canvas = document.querySelector("#experience-canvas");
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
+};
+
+const modals = {
+    AboutMe: document.querySelector(".modal.contact")
+};
+document.querySelectorAll(".modal-exit-button").forEach(button=>{
+    button.addEventListener("click",(e)=>{
+        const modal = e.target.closest(".modal");
+        hideModal(modal);
+    })
+})
+document.getElementById("contact_button").addEventListener("click", (e) => {
+    showModal(modals.AboutMe);
+});
+const showModal = (modal) => {
+    modal.style.display = "block";
+
+    gsap.set(modal, {opacity: 0});
+
+    gsap.to(modal, {
+        opacity:1,
+        duration: 0.5,
+    });
+};
+const hideModal = (modal) => {
+    gsap.to(modal, {
+        opacity:0,
+        duration: 0.5,
+        onComplete: ()=> {
+            modal.style.display = "none";
+        }
+    });
 };
 
 const scene = createScene();
@@ -140,7 +173,13 @@ window.addEventListener("click",(e) =>{
                 newWindow.rel = "noopener noreferrer"
             }
         })
+
+        if (object.name.includes("Picture")) {
+            showModal(modals.AboutMe)
+        }
     }
+
+    
 })
 
 

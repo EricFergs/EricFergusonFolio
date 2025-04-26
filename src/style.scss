@@ -8,7 +8,7 @@
 }
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Motley Forces', sans-serif,system-ui, Avenir, Helvetica, Arial, sans-serif;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -35,7 +35,7 @@
   color: #eda72d;
   padding: 10px 0px;
   text-align: center;
-  font-size: 1.5vw;
+  font-size: 1.75vw;
   position: absolute;
   top: 0;
   height: 85px;
@@ -47,6 +47,7 @@
   z-index: 1;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
   transition: top 0.5s ease-in-out;
+  font-family: 'Motley Forces', sans-serif;
 }
 
 .banner-link {
@@ -59,5 +60,114 @@
 }
 
 .banner-link:hover {
-  font-size: 1.75vw;
+  font-size: 2vw;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 1200px;
+  width: 90%;
+  transform: translate(-50%, -50%);
+  font-size: 2.2rem;
+  z-index: 9999;
+  padding: 10px;
+  border-radius: 25px;
+  display: none;
+  border: 5px solid #000000;
+  background: #e0e3e7;
+  text-align: center;
+}
+.modal-wrapper {
+  width: 100%;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.modal-exit-button {
+  position: absolute;
+  top: -20px; 
+  left: -20px; 
+  background: #e0e3e7;
+  border: 5px solid #000000;
+  cursor: pointer;
+  z-index: 10000; 
+  padding: 0;
+  width: 60px; 
+  height: 60px;
+  transform: rotate(-17deg); 
+}
+
+.modal-title{
+  margin-top: 40px;
+}
+.modal-exit-button svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor; 
+  transition: transform 0.2s ease-in-out;
+}
+
+
+
+
+.contact {
+  max-width: 500px;
+}
+.contact .modal-content {
+  height: 170px;
+  overflow: visible;
+
+}
+.contact .modal-content-wrapper {
+  overflow: visible;
+}
+.contact-button-wrapper {
+  margin-top: 24px;
+  justify-content: space-between;
+}
+.contact-svg {
+  margin-left:10px;
+  margin-top: 50px;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+
+
+.circular-button {
+  position: absolute;
+  display: block;
+  bottom: 50px;
+  left: 50px;
+  width: 100px;
+  opacity: 1;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #4c6364;
+  text-align: center;
+  line-height: 100px;
+  text-decoration: none;
+  visibility: visible;
+  font-size: 16px;
+  cursor: pointer;
+  transition: opacity 1s, visibility 1s, background-size 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  z-index: 2;
+  background-image: url("../static/assets/svg/arrow-back.svg");
+  background-size: 70%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.circular-button:hover {
+  background-size: 75%;
+}
+.show-back-button {
+  visibility: visible;
+  opacity: 1;
 }
