@@ -177,6 +177,28 @@ window.addEventListener("click",(e) =>{
         if (object.name.includes("Picture")) {
             showModal(modals.AboutMe)
         }
+
+        if (object.name.includes("Frieren")){
+            controls.enabled = false;
+
+            const objectPosition = new THREE.Vector3();
+            object.getWorldPosition(objectPosition);
+            objectPosition.y += 0.8
+            objectPosition.z += 0.4    
+            const offsetDirection = new THREE.Vector3(1, 0, 0); // assuming +Z is forward
+            const cameraDistance = 1; // or however far you want
+            
+            const cameraTargetPos = objectPosition.clone().add(offsetDirection.multiplyScalar(cameraDistance));
+            gsap.to(camera.position, {
+                duration: 2,
+                x: cameraTargetPos.x,
+                y: cameraTargetPos.y,
+                z: cameraTargetPos.z +0.3,
+                onUpdate: () => {
+                  camera.lookAt(objectPosition);
+                }
+            });
+        }
     }
 
     
@@ -230,7 +252,7 @@ const render = (timestamp) => {
     }
     // renderer.render( scene, camera );
     composer.render();
-
+    
     window.requestAnimationFrame(render)
 }
 
