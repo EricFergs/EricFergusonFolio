@@ -29,3 +29,35 @@
   }
 }
 
+.banner {
+  display: flex;
+  background-color: #4c6364;
+  color: #eda72d;
+  padding: 10px 0px;
+  text-align: center;
+  font-size: 1.5vw;
+  position: absolute;
+  top: 0;
+  height: 85px;
+  left: 0;
+  width: 100vw;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  transition: top 0.5s ease-in-out;
+}
+
+.banner-link {
+  text-align: center;
+  user-select: none;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0 1vw;
+  transition: 0.2s ease-in-out;
+}
+
+.banner-link:hover {
+  font-size: 1.75vw;
+}
