@@ -9,6 +9,7 @@ import { createOutlinePass } from './OutlinePass.js';
 import gsap from "gsap"
 import { pass } from 'three/tsl';
 
+let isAnimating = false;
 const canvas = document.querySelector("#experience-canvas");
 const sizes = {
     width: window.innerWidth,
@@ -29,24 +30,28 @@ document.querySelectorAll(".modal-exit-button").forEach(button=>{
 })
 const backButton = document.getElementById("back-button")
 backButton.addEventListener("click", (e) => {
-    backButton.style.display = "none";
-    const initialCameraPos = new THREE.Vector3(14.351001566716521, 6.903370258003837, 10.906939879591045);
-    const initialTarget = new THREE.Vector3(1.43, 1.94, -2.58);
-    gsap.to(camera.position, {
-        duration: 2,
-        x: initialCameraPos.x,
-        y: initialCameraPos.y,
-        z: initialCameraPos.z,
-        onUpdate: () => {
-          camera.lookAt(initialTarget);
-        },
-        onComplete: () => {
-            controls.target.copy(initialTarget);
-            controls.enabled = true;
-            modalView = false;
+    if (!isAnimating) {
+        isAnimating = true
+        backButton.style.display = "none";
+        const initialCameraPos = new THREE.Vector3(14.351001566716521, 6.903370258003837, 10.906939879591045);
+        const initialTarget = new THREE.Vector3(1.43, 1.94, -2.58);
+        gsap.to(camera.position, {
+            duration: 2,
+            x: initialCameraPos.x,
+            y: initialCameraPos.y,
+            z: initialCameraPos.z,
+            onUpdate: () => {
+            camera.lookAt(initialTarget);
+            },
+            onComplete: () => {
+                controls.target.copy(initialTarget);
+                controls.enabled = true;
+                modalView = false;
+                isAnimating = false
+                console.log("back button was fired");
         }
     });
-    
+    }
 });
 
 const showModal = (modal) => {
@@ -182,8 +187,34 @@ window.addEventListener("mousemove", (e) => {
     pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
 	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 })
-
+function cameraAnimate(mesh,objVect,camX,camY,camZ,dist,offsetDirection){
+    if (!isAnimating){
+        controls.enabled = false;
+        isAnimating = true;
+        modalView = true;
+        const objectPosition = new THREE.Vector3();
+        mesh.getWorldPosition(objectPosition);
+        objectPosition.add(objVect) 
+        const cameraDistance = dist; 
+        const cameraTargetPos = objectPosition.clone().add(offsetDirection.multiplyScalar(cameraDistance));
+        gsap.to(camera.position, {
+            duration: 2,
+            x: cameraTargetPos.x + camX,
+            y: cameraTargetPos.y + camY,
+            z: cameraTargetPos.z + camZ,
+            onUpdate: () => {
+                camera.lookAt(objectPosition);
+            },
+            onComplete: () => {
+                backButton.style.display = "block";
+                isAnimating = false;
+            }
+        });
+    }
+}
+const XAxis = new THREE.Vector3(1, 0, 0);
 window.addEventListener("click",(e) =>{
+    
     if(currentIntersects.length > 0){
         const object = currentIntersects[0].object
 
@@ -198,30 +229,25 @@ window.addEventListener("click",(e) =>{
         })
 
         if (object.name.includes("Picture")) {
-            showModal(modals.AboutMe)
+            //showModal(modals.AboutMe)
+            const objVect = new THREE.Vector3(0,0.2,0.5);
+            cameraAnimate(object,objVect,0,0,0,1,XAxis);
         }
-
-        if (object.name.includes("Frieren")){
-            controls.enabled = false;
-            backButton.style.display = "block";
-            modalView = true;
-            const objectPosition = new THREE.Vector3();
-            object.getWorldPosition(objectPosition);
-            objectPosition.y += 0.8
-            objectPosition.z += 0.4    
-            const offsetDirection = new THREE.Vector3(1, 0, 0); // assuming +Z is forward
-            const cameraDistance = 1; // or however far you want
-            
-            const cameraTargetPos = objectPosition.clone().add(offsetDirection.multiplyScalar(cameraDistance));
-            gsap.to(camera.position, {
-                duration: 2,
-                x: cameraTargetPos.x,
-                y: cameraTargetPos.y,
-                z: cameraTargetPos.z +0.3,
-                onUpdate: () => {
-                  camera.lookAt(objectPosition);
-                }
-            });
+        else if (object.name.includes("Frieren")){
+            const objVect = new THREE.Vector3(0,0.8,0.4);
+            cameraAnimate(object,objVect,0,0,0.3,1,XAxis);
+        }
+        else if (object.name.includes("Degree")){
+            const objVect = new THREE.Vector3(0,0,0);
+            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(0, 0, 1.3));
+        }
+        else if (object.name.includes("ScreenBig")){
+            const objVect = new THREE.Vector3(0,0,0);
+            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(0.2, 0, 1.3));
+        }
+        else if(object.name.includes("ScreenSmall")){
+            const objVect = new THREE.Vector3(0,0,0);
+            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(-0.2, 0, 1.3));
         }
     }
 
