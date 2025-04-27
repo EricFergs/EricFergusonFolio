@@ -25,7 +25,11 @@ $border-radius-standard: 10px;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
+@mixin left-side {
+  position: absolute;
+  top: 14%;
+  left: 0;
+}
 @mixin modal-border {
   border: 5px solid $border-dark;
   border-radius: $border-radius-standard;
@@ -98,22 +102,16 @@ $border-radius-standard: 10px;
 
 // Modal components
 .modal {
-  @include absolute-center;
-  max-width: 1200px;
-  width: 90%;
-  font-size: 2.2rem;
+  
+    
+  
+  
   z-index: 9999;
   padding: 10px;
   display: none;
   @include modal-border;
   background: $light-bg;
   text-align: center;
-  
-  &-wrapper {
-    width: 100%;
-    flex-direction: column;
-    gap: 24px;
-  }
   
   &-exit-button {
     position: absolute;
@@ -141,10 +139,20 @@ $border-radius-standard: 10px;
   }
 }
 
+.frieren {
+  overflow-y: auto;
+  max-width: 700px;
+  @include left-side;
+  width: 90%;
+  height: 82%;
+  font-size: 1.6rem;
+}
 // Contact modal specific styles
 .contact {
   max-width: 500px;
-  
+  @include absolute-center;
+  width: 90%;
+  font-size: 2.2rem;
   .modal-content {
     height: 170px;
     overflow: visible;
@@ -174,7 +182,7 @@ $border-radius-standard: 10px;
   position: absolute;
   display: none;
   bottom: 50px;
-  left: 30px;
+  right: 30px;
   width: 100px;
   height: 100px;
   opacity: 1;
@@ -202,4 +210,29 @@ $border-radius-standard: 10px;
 .show-back-button {
   visibility: visible;
   opacity: 1;
+}
+body {
+  --sb-track-color: $light-bg;
+  --sb-thumb-color: $primary-color;
+  --sb-size: 8px;
+}
+.frieren::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+.frieren::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 8px;
+}
+
+.frieren::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 6px;
+  border: 1.8px solid #1d272b;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .frieren {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
 }

@@ -31,7 +31,8 @@ export async function loadComponent(filePath, targetElementId) {
   export async function initComponents() {
     const components = [
       { path: '/components/navigation.html', target: 'navigation-container' },
-      { path: '/components/contact.html', target: 'modals-container' }
+      { path: '/components/contact.html', target: 'modals-container' },
+      { path: '/components/frieren.html', target: 'frieren-container' }
     ];
     
     const loadPromises = components.map(component => 

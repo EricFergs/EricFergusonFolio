@@ -47,11 +47,12 @@ const sizes = {
 
 
 const modals = {
-    Contact: document.querySelector(".modal.contact")
+    Contact: document.querySelector(".modal.contact"),
+    Frieren: document.querySelector(".frieren.modal")
 };
 const AboutButton = document.getElementById("about_button")
 AboutButton.addEventListener("click",(e)=>{
-    showModal(modals.Contact)
+    showModal(modals.Frieren)
 })
 const ProjectsButton = document.getElementById("projects_button")
 ProjectsButton.addEventListener("click",(e)=>{

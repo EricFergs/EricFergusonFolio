@@ -70,11 +70,11 @@ function handleCameraAnimations(object, state, camera) {
     const XAxis = new THREE.Vector3(1, 0, 0);
 
     if (object.name.includes("Picture")) {
-        const objVect = new THREE.Vector3(0, 0.2, 0.5);
+        const objVect = new THREE.Vector3(0, 0.2, 0.7);
         cameraAnimate(object, objVect, 0, 0, 0, 1, XAxis, state, camera);
     }
     else if (object.name.includes("Frieren")) {
-        const objVect = new THREE.Vector3(0, 0.8, 0.4);
+        const objVect = new THREE.Vector3(0, 0.8, 0.8);
         cameraAnimate(object, objVect, 0, 0, 0.3, 1, XAxis, state, camera);
     }
     else if (object.name.includes("Degree")) {
@@ -130,6 +130,7 @@ function setupModalExitButtons() {
 }
 
 export function showModal(modal) {
+    console.log(modal)
     modal.style.display = "block";
 
     gsap.set(modal, { opacity: 0 });
