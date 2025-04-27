@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import * as THREE from 'three';
 
 export function playHoverAnimation(object, isHovering){
     let scale = 1.2;
@@ -20,4 +21,35 @@ export function playHoverAnimation(object, isHovering){
           duration: 0.3,
           ease: "back.out(2)",
     })}
+}
+
+export function cameraAnimate(mesh,objVect,camX,camY,camZ,dist,offsetDirection,state,camera){
+    if(state.isAnimating) return;
+
+    state.isAnimating = true;
+    state.modalView = true;
+    state.control = false;
+    
+
+    const objectPosition = new THREE.Vector3();
+    mesh.getWorldPosition(objectPosition);
+    objectPosition.add(objVect);
+
+    const cameraDistance = dist; 
+    const cameraTargetPos = objectPosition.clone().add(offsetDirection.multiplyScalar(cameraDistance));
+
+    gsap.to(camera.position, {
+        duration: 2,
+        x: cameraTargetPos.x + camX,
+        y: cameraTargetPos.y + camY,
+        z: cameraTargetPos.z + camZ,
+        onUpdate: () => {
+            camera.lookAt(objectPosition);
+        },
+        onComplete: () => {
+            state.backButton = "block";
+            state.isAnimating = false;
+        }
+    });
+    
 }

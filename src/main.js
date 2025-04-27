@@ -4,23 +4,61 @@ import { createScene } from './scene.js';
 import { createCamera } from './camera.js';
 import { setupControls } from './controls.js';
 import { setupLoaders } from './loaders.js';
-import { playHoverAnimation } from './animations.js';
+import { playHoverAnimation, cameraAnimate } from './animations.js';
 import { createOutlinePass } from './OutlinePass.js';
 import gsap from "gsap"
-import { pass } from 'three/tsl';
 
-let isAnimating = false;
+//ModalView is when we're veiwing something and don't want camera controls
+//IsAnimating is so other animation can't play while we're animating
+const backButton = document.getElementById("back-button")
+const state = {
+    isAnimating: false,
+    modalView: false,
+    get control() {
+        return controls.enabled; 
+    },
+    set control(value) {
+        controls.enabled = value; 
+    },
+    get backButton(){
+        return backButton.style.display;
+    },
+    set backButton(value){
+        backButton.style.display = value;
+    }
+}
+
 const canvas = document.querySelector("#experience-canvas");
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 };
 
-let modalView = false;
-const modals = {
-    AboutMe: document.querySelector(".modal.contact")
-};
 
+const modals = {
+    Contact: document.querySelector(".modal.contact")
+};
+const AboutButton = document.getElementById("about_button")
+AboutButton.addEventListener("click",(e)=>{
+    showModal(modals.Contact)
+})
+const ProjectsButton = document.getElementById("projects_button")
+ProjectsButton.addEventListener("click",(e)=>{
+    showModal(modals.Contact)
+})
+const ExperienceButton = document.getElementById("experiece_button")
+ExperienceButton.addEventListener("click",(e)=>{
+    showModal(modals.Contact)
+})
+const EducationButton = document.getElementById("education_button")
+EducationButton.addEventListener("click",(e)=>{
+    showModal(modals.Contact)
+})
+const contactButton = document.getElementById("contact_button")
+contactButton.addEventListener("click",(e)=>{
+    showModal(modals.Contact)
+})
+   
 
 document.querySelectorAll(".modal-exit-button").forEach(button=>{
     button.addEventListener("click",(e)=>{
@@ -28,10 +66,10 @@ document.querySelectorAll(".modal-exit-button").forEach(button=>{
         hideModal(modal);
     })
 })
-const backButton = document.getElementById("back-button")
+
 backButton.addEventListener("click", (e) => {
-    if (!isAnimating) {
-        isAnimating = true
+    if (!state.isAnimating) {
+        state.isAnimating = true
         backButton.style.display = "none";
         const initialCameraPos = new THREE.Vector3(14.351001566716521, 6.903370258003837, 10.906939879591045);
         const initialTarget = new THREE.Vector3(1.43, 1.94, -2.58);
@@ -46,8 +84,8 @@ backButton.addEventListener("click", (e) => {
             onComplete: () => {
                 controls.target.copy(initialTarget);
                 controls.enabled = true;
-                modalView = false;
-                isAnimating = false
+                state.modalView = false;
+                state.isAnimating = false
                 console.log("back button was fired");
         }
     });
@@ -111,6 +149,7 @@ gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
             Object.keys(textureMap).forEach((key) => {
                 if (child.name.includes(key)){
                     const texture = textureLoader.load(textureMap[key]);
+                    // texture.colorSpace = THREE.SRGBColorSpace
                     texture.flipY = false; 
                     const material = new THREE.MeshBasicMaterial({
                         map: texture
@@ -187,31 +226,7 @@ window.addEventListener("mousemove", (e) => {
     pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
 	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
 })
-function cameraAnimate(mesh,objVect,camX,camY,camZ,dist,offsetDirection){
-    if (!isAnimating){
-        controls.enabled = false;
-        isAnimating = true;
-        modalView = true;
-        const objectPosition = new THREE.Vector3();
-        mesh.getWorldPosition(objectPosition);
-        objectPosition.add(objVect) 
-        const cameraDistance = dist; 
-        const cameraTargetPos = objectPosition.clone().add(offsetDirection.multiplyScalar(cameraDistance));
-        gsap.to(camera.position, {
-            duration: 2,
-            x: cameraTargetPos.x + camX,
-            y: cameraTargetPos.y + camY,
-            z: cameraTargetPos.z + camZ,
-            onUpdate: () => {
-                camera.lookAt(objectPosition);
-            },
-            onComplete: () => {
-                backButton.style.display = "block";
-                isAnimating = false;
-            }
-        });
-    }
-}
+
 const XAxis = new THREE.Vector3(1, 0, 0);
 window.addEventListener("click",(e) =>{
     
@@ -229,25 +244,25 @@ window.addEventListener("click",(e) =>{
         })
 
         if (object.name.includes("Picture")) {
-            //showModal(modals.AboutMe)
+            
             const objVect = new THREE.Vector3(0,0.2,0.5);
-            cameraAnimate(object,objVect,0,0,0,1,XAxis);
+            cameraAnimate(object,objVect,0,0,0,1,XAxis,state,camera);
         }
         else if (object.name.includes("Frieren")){
             const objVect = new THREE.Vector3(0,0.8,0.4);
-            cameraAnimate(object,objVect,0,0,0.3,1,XAxis);
+            cameraAnimate(object,objVect,0,0,0.3,1,XAxis,state,camera);
         }
         else if (object.name.includes("Degree")){
-            const objVect = new THREE.Vector3(0,0,0);
-            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(0, 0, 1.3));
+            const objVect = new THREE.Vector3(0,0.1,0);
+            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(0, 0, 1.3),state,camera);
         }
         else if (object.name.includes("ScreenBig")){
             const objVect = new THREE.Vector3(0,0,0);
-            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(0.2, 0, 1.3));
+            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(0.4, 0, 1.3),state,camera);
         }
         else if(object.name.includes("ScreenSmall")){
             const objVect = new THREE.Vector3(0,0,0);
-            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(-0.2, 0, 1.3));
+            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(-0.3, 0, 1.3),state,camera);
         }
     }
 
@@ -256,7 +271,7 @@ window.addEventListener("click",(e) =>{
 
 
 const render = (timestamp) => {
-    if(!modalView){
+    if(!state.modalView){
         controls.update();
     };
     yAxisFans.forEach(fan => {
@@ -301,7 +316,8 @@ const render = (timestamp) => {
         }
         document.body.style.cursor = "default"
     }
-    // renderer.render( scene, camera );
+    // renderer.render(scene, camera);
+    // To test rendering without the compositor, comment out the composer.render() line.
     composer.render();
     
     window.requestAnimationFrame(render);

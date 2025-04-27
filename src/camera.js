@@ -7,6 +7,6 @@ export function createCamera(sizes) {
         sizes.width / sizes.height, 
         0.1,
         1000);
-    camera.position.set(14.351001566716521,6.903370258003837,10.906939879591045);
+    camera.position.set(14.35,6.90,10.90);
     return camera;
 }
