@@ -6,10 +6,20 @@ import { setupControls } from './controls.js';
 import { setupLoaders } from './loaders.js';
 import { playHoverAnimation,performHover, cameraAnimate, animateFans, animateChair } from './animations.js';
 import { createOutlinePass } from './OutlinePass.js';
+import { initComponents } from '../utils/componentLoader.js';
 import gsap from "gsap"
+
+
+initComponents().then(() => {
+    // After components are loaded, initialize the 3D experience
+    initializeExperience();
+});
+  
 
 //ModalView is when we're veiwing something and don't want camera controls
 //IsAnimating is so other animation can't play while we're animating
+function initializeExperience() {
+
 const backButton = document.getElementById("back-button")
 const state = {
     isAnimating: false,
@@ -300,3 +310,5 @@ const render = (timestamp) => {
 }
 
 render();
+
+}
