@@ -7,10 +7,10 @@ $accent-color: #eda72d;
 $light-bg: #e0e3e7;
 $border-dark: #000000;
 $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-$primary-font: 'Motley Forces', sans-serif;
+$primary-font: 'Motley Forces', 'EudoxusSans';
 $transition-standard: 0.2s ease-in-out;
 $transition-long: 0.5s ease-in-out;
-$border-radius-standard: 10px;
+$border-radius-standard: 2px;
 
 // Mixins
 @mixin flex-center {
@@ -31,7 +31,7 @@ $border-radius-standard: 10px;
   left: 0;
 }
 @mixin modal-border {
-  border: 5px solid $border-dark;
+  border: 2px solid $border-dark;
   border-radius: $border-radius-standard;
 }
 
@@ -103,22 +103,19 @@ $border-radius-standard: 10px;
 // Modal components
 .modal {
   
-    
-  
-  
   z-index: 9999;
   padding: 10px;
   display: none;
   @include modal-border;
   background: $light-bg;
   text-align: center;
-  
+  font-family: "EudoxusSans";
   &-exit-button {
     position: absolute;
     top: -20px;
     left: -20px;
     background: $light-bg;
-    border: 5px solid $border-dark;
+    border: 2px solid $border-dark;
     cursor: pointer;
     z-index: 10000;
     padding: 0;
@@ -173,7 +170,9 @@ $border-radius-standard: 10px;
     width: 100px;
     height: 100px;
     cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    & {
+      
+    }
   }
 }
 

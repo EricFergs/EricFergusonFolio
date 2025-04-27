@@ -6,4 +6,11 @@
     font-style: normal;
     font-display: swap;
 }
-
+@font-face {
+    font-family: 'EudoxusSans';
+    src: url('/fonts/EudoxusSans-Regular.woff2') format('woff2'),
+        url('/fonts/EudoxusSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
