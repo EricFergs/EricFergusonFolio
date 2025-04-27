@@ -1,21 +1,52 @@
 @use "./styles/fonts.scss";
 @use "./styles/reset.scss";
 
-*{
-  margin : 0px;
-  padding: 0px;
-  box-sizing: border-box
+// Variables
+$primary-color: #4c6364;
+$accent-color: #eda72d;
+$light-bg: #e0e3e7;
+$border-dark: #000000;
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+$primary-font: 'Motley Forces', sans-serif;
+$transition-standard: 0.2s ease-in-out;
+$transition-long: 0.5s ease-in-out;
+$border-radius-standard: 10px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin modal-border {
+  border: 5px solid $border-dark;
+  border-radius: $border-radius-standard;
+}
+
+// Base styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-  font-family: 'Motley Forces', sans-serif,system-ui, Avenir, Helvetica, Arial, sans-serif;
-
+  font-family: $primary-font, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+// Experience canvas
 #experience {
   position: fixed;
   height: 100%;
@@ -23,17 +54,19 @@
   top: 0;
   left: 0;
   overflow: hidden;
-  #experience-canvas {
+  
+  &-canvas {
     height: 100%;
     width: 100%;
   }
 }
 
+// Navigation banner
 .banner {
   display: flex;
-  background-color: #4c6364;
-  color: #eda72d;
-  padding: 10px 0px;
+  background-color: $primary-color;
+  color: $accent-color;
+  padding: 10px 0;
   text-align: center;
   font-size: 1.75vw;
   position: absolute;
@@ -45,128 +78,127 @@
   align-items: center;
   justify-content: space-around;
   z-index: 1;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
-  transition: top 0.5s ease-in-out;
-  font-family: 'Motley Forces', sans-serif;
+  box-shadow: $box-shadow;
+  transition: top $transition-long;
+  font-family: $primary-font;
+
+  &-link {
+    text-align: center;
+    user-select: none;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 1vw;
+    transition: $transition-standard;
+    
+    &:hover {
+      font-size: 2vw;
+    }
+  }
 }
 
-.banner-link {
-  text-align: center;
-  user-select: none;
-  justify-content: center;
-  cursor: pointer;
-  margin: 0 1vw;
-  transition: 0.2s ease-in-out;
-}
-
-.banner-link:hover {
-  font-size: 2vw;
-}
-
+// Modal components
 .modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  @include absolute-center;
   max-width: 1200px;
   width: 90%;
-  transform: translate(-50%, -50%);
   font-size: 2.2rem;
   z-index: 9999;
   padding: 10px;
-  border-radius: 10px;
   display: none;
-  border: 5px solid #000000;
-  background: #e0e3e7;
+  @include modal-border;
+  background: $light-bg;
   text-align: center;
+  
+  &-wrapper {
+    width: 100%;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  &-exit-button {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    background: $light-bg;
+    border: 5px solid $border-dark;
+    cursor: pointer;
+    z-index: 10000;
+    padding: 0;
+    width: 60px;
+    height: 60px;
+    transform: rotate(-17deg);
+    
+    svg {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+      transition: transform $transition-standard;
+    }
+  }
+  
+  &-title {
+    margin-top: 40px;
+  }
 }
-.modal-wrapper {
-  width: 100%;
-  flex-direction: column;
-  gap: 24px;
-}
 
-.modal-exit-button {
-  position: absolute;
-  top: -20px; 
-  left: -20px; 
-  background: #e0e3e7;
-  border: 5px solid #000000;
-  cursor: pointer;
-  z-index: 10000; 
-  padding: 0;
-  width: 60px; 
-  height: 60px;
-  transform: rotate(-17deg); 
-}
-
-.modal-title{
-  margin-top: 40px;
-}
-.modal-exit-button svg {
-  width: 100%;
-  height: 100%;
-  fill: currentColor; 
-  transition: transform 0.2s ease-in-out;
-}
-
-
-
-
+// Contact modal specific styles
 .contact {
   max-width: 500px;
+  
+  .modal-content {
+    height: 170px;
+    overflow: visible;
+    
+    &-wrapper {
+      overflow: visible;
+    }
+  }
+  
+  &-button-wrapper {
+    margin-top: 24px;
+    justify-content: space-between;
+  }
+  
+  &-svg {
+    margin-left: 10px;
+    margin-top: 50px;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 }
-.contact .modal-content {
-  height: 170px;
-  overflow: visible;
 
-}
-.contact .modal-content-wrapper {
-  overflow: visible;
-}
-.contact-button-wrapper {
-  margin-top: 24px;
-  justify-content: space-between;
-}
-.contact-svg {
-  margin-left:10px;
-  margin-top: 50px;
-  width: 100px;
-  height: 100px;
-  cursor: pointer;
-
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-
-
-
+// Back button
 .circular-button {
   position: absolute;
   display: none;
   bottom: 50px;
   left: 30px;
   width: 100px;
-  opacity: 1;
   height: 100px;
+  opacity: 1;
   border-radius: 50%;
-  background-color: #4c6364;
+  background-color: $primary-color;
   text-align: center;
   line-height: 100px;
   text-decoration: none;
   visibility: visible;
   font-size: 16px;
   cursor: pointer;
-  transition: opacity 1s, visibility 1s, background-size 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  box-shadow: $box-shadow;
   z-index: 2;
   background-image: url("../public/images/back-arrow-icon.svg");
   background-size: 60%;
   background-position: center;
   background-repeat: no-repeat;
+  transition: opacity 1s, visibility 1s, background-size $transition-standard;
+  
+  &:hover {
+    background-size: 75%;
+  }
 }
-.circular-button:hover {
-  background-size: 75%;
-}
+
 .show-back-button {
   visibility: visible;
   opacity: 1;

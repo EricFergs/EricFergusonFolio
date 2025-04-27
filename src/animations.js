@@ -83,7 +83,6 @@ export function animateChair(chair,timestamp){
 
 export function performHover(currentIntersects,state){
     const currentIntersectsObject = currentIntersects[0].object
-    //console.log(state.currentHoveredObject)
     if (currentIntersectsObject.name.includes("Frieren") || 
         currentIntersectsObject.name.includes("Github") || 
         currentIntersectsObject.name.includes("LinkedIn")){
@@ -101,5 +100,4 @@ export function performHover(currentIntersects,state){
             state.currentHoveredObject = null;
         }
     }
-    //console.log(state.currentHoveredObject)
 }

@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 
-
 export function createCamera(sizes) {
     const camera = new THREE.PerspectiveCamera( 
         75, 
