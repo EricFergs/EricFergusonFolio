@@ -4,7 +4,7 @@ import { createScene } from './scene.js';
 import { createCamera } from './camera.js';
 import { setupControls } from './controls.js';
 import { setupLoaders } from './loaders.js';
-import { playHoverAnimation, cameraAnimate } from './animations.js';
+import { playHoverAnimation,performHover, cameraAnimate, animateFans, animateChair } from './animations.js';
 import { createOutlinePass } from './OutlinePass.js';
 import gsap from "gsap"
 
@@ -14,6 +14,7 @@ const backButton = document.getElementById("back-button")
 const state = {
     isAnimating: false,
     modalView: false,
+    currentHoveredObject: null,
     get control() {
         return controls.enabled; 
     },
@@ -125,7 +126,7 @@ const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const raycasterObjects = [];
 let currentIntersects = [];
-let currentHoveredObject = null;
+
 
 const { composer, outlinePass } = createOutlinePass(renderer, scene, camera);
 
@@ -274,52 +275,27 @@ const render = (timestamp) => {
     if(!state.modalView){
         controls.update();
     };
-    yAxisFans.forEach(fan => {
-        fan.rotation.x += 0.03;
-    });
-    if(chair) {
-        const time = timestamp * 0.001;
-        const baseAmplitude = Math.PI / 8;
     
-        const rotationOffset =
-          baseAmplitude *
-          Math.sin(time * 0.5) *
-          (1 - Math.abs(Math.sin(time * 0.5)) * 0.3);
+    animateChair(chair,timestamp)
+    animateFans(yAxisFans)
     
-        chair.rotation.y = chair.userData.initialRotation.y + rotationOffset;
-    };
 
     raycaster.setFromCamera( pointer, camera );
 	currentIntersects = raycaster.intersectObjects( raycasterObjects );
 	
     if(currentIntersects.length>0){
-        const currentIntersectsObject = currentIntersects[0].object
-        document.body.style.cursor = "pointer"
-        if (currentIntersectsObject.name.includes("Frieren") || currentIntersectsObject.name.includes("Github") || currentIntersectsObject.name.includes("LinkedIn")){
-            if(currentIntersectsObject !== currentHoveredObject){
-                if (currentHoveredObject) {
-                    playHoverAnimation(currentHoveredObject, false);
-                }
-                currentHoveredObject = currentIntersectsObject
-                playHoverAnimation(currentHoveredObject, true);
-            }
-        }else{
-            if (currentHoveredObject){
-                playHoverAnimation(currentHoveredObject, false);
-                currentHoveredObject = null;
-            }
-        }
+        document.body.style.cursor = "pointer";
+        performHover(currentIntersects,state)
     }else{
-        if (currentHoveredObject) {
-            playHoverAnimation(currentHoveredObject, false);
-            currentHoveredObject = null;
-        }
-        document.body.style.cursor = "default"
+        if (state.currentHoveredObject) {
+            playHoverAnimation(state.currentHoveredObject, false);
+            state.currentHoveredObject = null;}
+        document.body.style.cursor = "default";
     }
+    
     // renderer.render(scene, camera);
     // To test rendering without the compositor, comment out the composer.render() line.
     composer.render();
-    
     window.requestAnimationFrame(render);
 }
 

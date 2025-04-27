@@ -2,7 +2,14 @@ import gsap from "gsap";
 import * as THREE from 'three';
 
 export function playHoverAnimation(object, isHovering){
+    if (!object || !object.userData || !object.userData.initialScale) {
+        console.warn("Cannot animate object without initialScale:", object?.name);
+        return;
+    }
+
+    
     let scale = 1.2;
+    
     gsap.killTweensOf(object.scale);
     if (isHovering) {
             // Scale animation for all objects
@@ -52,4 +59,47 @@ export function cameraAnimate(mesh,objVect,camX,camY,camZ,dist,offsetDirection,s
         }
     });
     
+}
+
+export function animateFans(yAxisFans){
+    yAxisFans.forEach(fan => {
+            fan.rotation.x += 0.03;
+    });  
+}
+
+export function animateChair(chair,timestamp){
+    if (!chair) return;
+    
+    const time = timestamp * 0.001;
+    const baseAmplitude = Math.PI / 8;
+
+    const rotationOffset =
+        baseAmplitude *
+        Math.sin(time * 0.5) *
+        (1 - Math.abs(Math.sin(time * 0.5)) * 0.3);
+
+    chair.rotation.y = chair.userData.initialRotation.y + rotationOffset;
+}
+
+export function performHover(currentIntersects,state){
+    const currentIntersectsObject = currentIntersects[0].object
+    //console.log(state.currentHoveredObject)
+    if (currentIntersectsObject.name.includes("Frieren") || 
+        currentIntersectsObject.name.includes("Github") || 
+        currentIntersectsObject.name.includes("LinkedIn")){
+
+        if(currentIntersectsObject !== state.currentHoveredObject){
+            if (state.currentHoveredObject) {
+                playHoverAnimation(state.currentHoveredObject, false);
+            }
+            state.currentHoveredObject = currentIntersectsObject
+            playHoverAnimation(state.currentHoveredObject, true);
+        }
+    }else{
+        if (state.currentHoveredObject){
+            playHoverAnimation(state.currentHoveredObject, false);
+            state.currentHoveredObject = null;
+        }
+    }
+    //console.log(state.currentHoveredObject)
 }
