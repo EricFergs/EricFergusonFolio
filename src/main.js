@@ -7,11 +7,11 @@ import { setupLoaders } from './loaders.js';
 import { playHoverAnimation,performHover, cameraAnimate, animateFans, animateChair } from './animations.js';
 import { createOutlinePass } from './OutlinePass.js';
 import { initComponents } from '../utils/componentLoader.js';
+import { setupEventListeners, showModal, hideModal } from './eventHandler.js';
 import gsap from "gsap"
 
 
 initComponents().then(() => {
-    // After components are loaded, initialize the 3D experience
     initializeExperience();
 });
   
@@ -71,57 +71,6 @@ contactButton.addEventListener("click",(e)=>{
 })
    
 
-document.querySelectorAll(".modal-exit-button").forEach(button=>{
-    button.addEventListener("click",(e)=>{
-        const modal = e.target.closest(".modal");
-        hideModal(modal);
-    })
-})
-
-backButton.addEventListener("click", (e) => {
-    if (!state.isAnimating) {
-        state.isAnimating = true
-        backButton.style.display = "none";
-        const initialCameraPos = new THREE.Vector3(14.351001566716521, 6.903370258003837, 10.906939879591045);
-        const initialTarget = new THREE.Vector3(1.43, 1.94, -2.58);
-        gsap.to(camera.position, {
-            duration: 2,
-            x: initialCameraPos.x,
-            y: initialCameraPos.y,
-            z: initialCameraPos.z,
-            onUpdate: () => {
-            camera.lookAt(initialTarget);
-            },
-            onComplete: () => {
-                controls.target.copy(initialTarget);
-                controls.enabled = true;
-                state.modalView = false;
-                state.isAnimating = false
-                console.log("back button was fired");
-        }
-    });
-    }
-});
-
-const showModal = (modal) => {
-    modal.style.display = "block";
-
-    gsap.set(modal, {opacity: 0});
-
-    gsap.to(modal, {
-        opacity:1,
-        duration: 0.5,
-    });
-};
-const hideModal = (modal) => {
-    gsap.to(modal, {
-        opacity:0,
-        duration: 0.5,
-        onComplete: ()=> {
-            modal.style.display = "none";
-        }
-    });
-};
 
 const scene = createScene();
 const camera = createCamera(sizes);
@@ -139,6 +88,7 @@ let currentIntersects = [];
 
 
 const { composer, outlinePass } = createOutlinePass(renderer, scene, camera);
+setupEventListeners(state, camera, controls, raycaster, pointer, raycasterObjects, modals,renderer);
 
 
 const textureMap = {
@@ -216,69 +166,7 @@ gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
 })
 
 
-const socialLinks = {
-    "Github" : "https://github.com/EricFergs",
-    "LinkedIn" : "https://www.linkedin.com/in/eric-ferguson-10687225b/"
-}
 
-
-window.addEventListener("resize", ()=>{
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
-
-    camera.aspect = sizes.width / sizes.height
-    camera.updateProjectionMatrix()
-
-    renderer.setSize(sizes.width, sizes.height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-})
-
-window.addEventListener("mousemove", (e) => {
-    pointer.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-	pointer.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
-})
-
-const XAxis = new THREE.Vector3(1, 0, 0);
-window.addEventListener("click",(e) =>{
-    
-    if(currentIntersects.length > 0){
-        const object = currentIntersects[0].object
-
-        Object.entries(socialLinks).forEach(([key, url]) => {
-            if(object.name.includes(key)){
-                const newWindow = window.open()
-                newWindow.opener = null
-                newWindow.location = url
-                newWindow.target= "_blank"
-                newWindow.rel = "noopener noreferrer"
-            }
-        })
-
-        if (object.name.includes("Picture")) {
-            
-            const objVect = new THREE.Vector3(0,0.2,0.5);
-            cameraAnimate(object,objVect,0,0,0,1,XAxis,state,camera);
-        }
-        else if (object.name.includes("Frieren")){
-            const objVect = new THREE.Vector3(0,0.8,0.4);
-            cameraAnimate(object,objVect,0,0,0.3,1,XAxis,state,camera);
-        }
-        else if (object.name.includes("Degree")){
-            const objVect = new THREE.Vector3(0,0.1,0);
-            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(0, 0, 1.3),state,camera);
-        }
-        else if (object.name.includes("ScreenBig")){
-            const objVect = new THREE.Vector3(0,0,0);
-            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(0.4, 0, 1.3),state,camera);
-        }
-        else if(object.name.includes("ScreenSmall")){
-            const objVect = new THREE.Vector3(0,0,0);
-            cameraAnimate(object,objVect,0,0,0,1,new THREE.Vector3(-0.3, 0, 1.3),state,camera);
-        }
-    }
-
-    
-})
 
 
 const render = (timestamp) => {
