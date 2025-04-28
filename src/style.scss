@@ -102,7 +102,6 @@ $border-radius-standard: 2px;
 
 // Modal components
 .modal {
-  
   z-index: 9999;
   padding: 10px;
   display: none;
@@ -143,6 +142,44 @@ $border-radius-standard: 2px;
   width: 90%;
   height: 82%;
   font-size: 1.6rem;
+  padding: 20px;
+  & p {
+    line-height: 1.4;
+    margin: 10px 10px 40px 10px;
+  }
+  & h1 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin: 10px 10px 40px 10px;
+    margin-top:20px
+  }
+  & .figure-container {
+    display: flex; /* Use flexbox to align figures side by side */
+    justify-content: space-between; /* Space out the figures */
+    align-items: flex-start; /* Align figures at the top */
+    gap: 0px; /* Add spacing between the figures */
+    margin: 10px 0;
+  }
+
+  & figure {
+    display: flex;
+    flex-direction: column; /* Stack image and caption vertically */
+    align-items: center; /* Center-align the image and caption */
+    flex: 1; /* Allow figures to take equal space */
+    max-width: 100%; /* Limit the width of each figure */
+  }
+
+  & img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  & figcaption {
+    margin-top: 10px;
+    font-size: 1rem;
+    text-align: center;
+    color: #333;
+  }
 }
 .Aboutme{
   overflow-y: auto;
@@ -150,15 +187,16 @@ $border-radius-standard: 2px;
   @include left-side;
   width: 90%;
   height: 82%;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   padding: 20px;
+  line-height: 1.45;
   & p {
-    margin: 10px 10px 40px 10px;
+    margin: 10px 10px 30px 10px;
   }
   & h1 {
     font-size: 1.8rem;
     text-align: center;
-    margin: 10px 10px 40px 10px;
+    margin: 10px 10px 20px 10px;
     margin-top:20px
   }
 }

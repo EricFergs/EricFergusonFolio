@@ -138,6 +138,10 @@ gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
                     }
                     if(child.name.includes("Picture")){
                         picture = child;
+                        const myPictureTexture = textureLoader.load('/images/Me.jpg'); 
+                        picture.material = new THREE.MeshBasicMaterial({
+                            map: myPictureTexture
+                        });
                     }
                     if (child.name.includes("Target")) {
                         child.geometry.computeVertexNormals();
