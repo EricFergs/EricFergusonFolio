@@ -1,6 +1,8 @@
 @use "./styles/fonts.scss";
 @use "./styles/reset.scss";
 
+
+
 // Variables
 $primary-color: #4c6364;
 $accent-color: #eda72d;
@@ -11,7 +13,10 @@ $primary-font: 'Motley Forces', 'EudoxusSans';
 $transition-standard: 0.2s ease-in-out;
 $transition-long: 0.5s ease-in-out;
 $border-radius-standard: 2px;
-
+.bold-eudoxus {
+  font-family: 'EudoxusSans', sans-serif;
+  font-weight: 700;  /* This will now use the bold version */
+}
 // Mixins
 @mixin flex-center {
   display: flex;
@@ -49,7 +54,9 @@ $border-radius-standard: 2px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+b {
+  font-weight: bold; /* Ensure bold weight is applied */
+}
 // Experience canvas
 #experience {
   position: fixed;
@@ -148,6 +155,7 @@ $border-radius-standard: 2px;
     margin: 10px 10px 40px 10px;
   }
   & h1 {
+    font-weight: bold;
     font-size: 1.8rem;
     text-align: center;
     margin: 10px 10px 40px 10px;
@@ -194,6 +202,7 @@ $border-radius-standard: 2px;
     margin: 10px 10px 30px 10px;
   }
   & h1 {
+    font-weight: bold;
     font-size: 1.8rem;
     text-align: center;
     margin: 10px 10px 20px 10px;
@@ -202,20 +211,33 @@ $border-radius-standard: 2px;
 }
 .Education{
   overflow-y: auto;
-  max-width: 700px;
-  @include left-side;
+  max-width: 1000px;
+  @include absolute-center;
   width: 90%;
   height: 82%;
+  top: 55%;
   font-size: 1.6rem;
   padding: 20px;
   & p {
-    margin: 10px 10px 40px 10px;
+    margin: 10px 10px 10px 10px;
+    line-height: 1.4;
   }
   & h1 {
-    font-size: 1.8rem;
+    font-weight: bold;
+    font-size: 2rem;
     text-align: center;
     margin: 10px 10px 40px 10px;
     margin-top:20px
+  }
+  & ul {
+    margin: 10px 0 20px 20px; /* Add spacing and indentation for lists */
+    padding-left: 20px;
+    list-style-type: disc; /* Use a disc for list items */
+    color: #333;
+  }
+  & li {
+    text-align: left;
+    margin-bottom: 10px; /* Add spacing between list items */
   }
 }
 // Contact modal specific styles

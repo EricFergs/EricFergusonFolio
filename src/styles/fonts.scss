@@ -14,3 +14,11 @@
     font-style: normal;
     font-display: swap;
 }
+@font-face {
+    font-family: 'EudoxusSans';
+    src: url('/fonts/EudoxusSans-Bold.woff2') format('woff2'),
+         url('/fonts/EudoxusSans-Bold.woff') format('woff');
+    font-weight: bold;  /* Specify that this is the bold version */
+    font-style: normal;
+    font-display: swap;
+}
