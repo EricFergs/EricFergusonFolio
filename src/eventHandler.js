@@ -47,6 +47,7 @@ export function setupEventListeners(state, camera, controls, raycaster, pointer,
 }
 
 function handleClick(e, state, camera, raycaster, pointer, raycasterObjects) {
+    if(state.modalView) return;
     raycaster.setFromCamera(pointer, camera);
     const currentIntersects = raycaster.intersectObjects(raycasterObjects);
 
