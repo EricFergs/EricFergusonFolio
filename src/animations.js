@@ -83,12 +83,15 @@ export function animateChair(chair,timestamp){
     chair.rotation.y = chair.userData.initialRotation.y + rotationOffset;
 }
 
+const hoverTargets = ["Frieren", "Github", "LinkedIn","Jigglypuff","Jirachi","Mouse","Headphones","Switch"];
+const pointerTargets = ["Frieren", "Github", "LinkedIn","Degree","Screen","Picture"];
+
 export function performHover(currentIntersects,state){
     const currentIntersectsObject = currentIntersects[0].object
-    if (currentIntersectsObject.name.includes("Frieren") || 
-        currentIntersectsObject.name.includes("Github") || 
-        currentIntersectsObject.name.includes("LinkedIn")){
-
+    if(pointerTargets.some(name => currentIntersectsObject.name.includes(name))){
+        document.body.style.cursor = "pointer";
+    }
+    if (hoverTargets.some(name => currentIntersectsObject.name.includes(name))){
         if(currentIntersectsObject !== state.currentHoveredObject){
             if (state.currentHoveredObject) {
                 playHoverAnimation(state.currentHoveredObject, false);

@@ -103,9 +103,11 @@ const textureMap = {
 
 const yAxisFans = [];
 let chair;
+const scaleTargets = ["Frieren", "Github", "LinkedIn","Jigglypuff","Jirachi","Mouse","Headphones","Switch"];
+
 ///models/Empty.glb
 //
-gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
+gltfLoader.load("/models/UpdatedUV.glb", (glb) => {
     glb.scene.traverse((child) => {
         if (child.isMesh) {
             child.visible = true;
@@ -128,18 +130,13 @@ gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
                         chair = child
                         child.userData.initialRotation = new THREE.Euler().copy(child.rotation);
                     }
-                    if(child.name.includes("Frieren")){ 
-                        child.userData.initialScale = new THREE.Vector3().copy(child.scale);
-                    }
-                    if(child.name.includes("Github")){
-                        child.userData.initialScale = new THREE.Vector3().copy(child.scale);
-                    }
-                    if(child.name.includes("LinkedIn")){
+                    if (scaleTargets.some(name => child.name.includes(name))) {
                         child.userData.initialScale = new THREE.Vector3().copy(child.scale);
                     }
                     if(child.name.includes("Picture")){
                         picture = child;
                         const myPictureTexture = textureLoader.load('/images/Me.jpg'); 
+                        myPictureTexture.flipY = false;
                         picture.material = new THREE.MeshBasicMaterial({
                             map: myPictureTexture
                         });
@@ -150,7 +147,9 @@ gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
                     if (child.name.includes("Target")) {
                         child.geometry.computeVertexNormals();
                         raycasterObjects.push(child);
-                        outlinePass.selectedObjects.push(child)
+                    }
+                    if (child.name.includes("Glow")){
+                        outlinePass.selectedObjects.push(child);
                     }
                 }
                 if(child.name.includes("Glass")){
@@ -194,7 +193,6 @@ const render = (timestamp) => {
 	currentIntersects = raycaster.intersectObjects( raycasterObjects );
 	
     if(currentIntersects.length>0){
-        document.body.style.cursor = "pointer";
         performHover(currentIntersects,state)
     }else{
         if (state.currentHoveredObject) {
