@@ -77,7 +77,6 @@ export function handleCameraAnimations(object, state, camera, modal) {
     const XAxis = new THREE.Vector3(1, 0, 0);
     if (object.name.includes("Picture")) {
         const objVect = new THREE.Vector3(0, 0.1, 0.7);
-        console.log("yo",modals.Aboutme)
         cameraAnimate(object, objVect, 0, 0.1, 0, 1, XAxis, state, camera, modals.Aboutme);
     }
     else if (object.name.includes("Frieren")) {

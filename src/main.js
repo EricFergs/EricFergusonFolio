@@ -16,6 +16,7 @@ initComponents().then(() => {
 });
   
 let picture;
+let degree;
 //ModalView is when we're veiwing something and don't want camera controls
 //IsAnimating is so other animation can't play while we're animating
 function initializeExperience() {
@@ -45,30 +46,30 @@ const sizes = {
     height: window.innerHeight
 };
 
-modals.Contact = document.querySelector(".modal.contact")
-modals.Frieren = document.querySelector(".frieren.modal")
-modals.Aboutme = document.querySelector(".Aboutme.modal")
-modals.Education = document.querySelector(".Education.modal")
+modals.Contact = document.querySelector(".modal.contact");
+modals.Frieren = document.querySelector(".frieren.modal");
+modals.Aboutme = document.querySelector(".Aboutme.modal");
+modals.Education = document.querySelector(".Education.modal");
 
-const AboutButton = document.getElementById("about_button")
+const AboutButton = document.getElementById("about_button");
 AboutButton.addEventListener("click",(e)=>{
     handleCameraAnimations(picture, state, camera);
 })
-const ProjectsButton = document.getElementById("projects_button")
+const ProjectsButton = document.getElementById("projects_button");
 ProjectsButton.addEventListener("click",(e)=>{
-    showModal(modals.Contact)
+    showModal(modals.Contact);
 })
-const ExperienceButton = document.getElementById("experiece_button")
+const ExperienceButton = document.getElementById("experiece_button");
 ExperienceButton.addEventListener("click",(e)=>{
-    showModal(modals.Contact)
+    showModal(modals.Contact);
 })
-const EducationButton = document.getElementById("education_button")
+const EducationButton = document.getElementById("education_button");
 EducationButton.addEventListener("click",(e)=>{
-    showModal(modals.Contact)
+    handleCameraAnimations(degree, state, camera);
 })
-const contactButton = document.getElementById("contact_button")
+const contactButton = document.getElementById("contact_button");
 contactButton.addEventListener("click",(e)=>{
-    showModal(modals.Contact)
+    showModal(modals.Contact);
 })
    
 
@@ -142,6 +143,9 @@ gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
                         picture.material = new THREE.MeshBasicMaterial({
                             map: myPictureTexture
                         });
+                    }
+                    if (child.name.includes("Degree")){
+                        degree = child;
                     }
                     if (child.name.includes("Target")) {
                         child.geometry.computeVertexNormals();
