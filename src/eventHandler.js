@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { cameraAnimate } from './animations.js';
+import { cameraAnimate, cameraAnimatePosition } from './animations.js';
 
 let activeModal = null; 
 export const modals = {
@@ -33,7 +33,7 @@ export function setupEventListeners(state, camera, controls, raycaster, pointer,
 
     // Mouse click event
     window.addEventListener("click", (e) => {
-        handleClick(e, state, camera, raycaster, pointer, raycasterObjects);
+        handleClick(e, state, camera, raycaster, pointer, raycasterObjects,controls);
     });
 
     // Back button event
@@ -46,7 +46,7 @@ export function setupEventListeners(state, camera, controls, raycaster, pointer,
     setupModalExitButtons();
 }
 
-function handleClick(e, state, camera, raycaster, pointer, raycasterObjects) {
+function handleClick(e, state, camera, raycaster, pointer, raycasterObjects,controls) {
     if(state.modalView) return;
     raycaster.setFromCamera(pointer, camera);
     const currentIntersects = raycaster.intersectObjects(raycasterObjects);
@@ -71,10 +71,10 @@ function handleClick(e, state, camera, raycaster, pointer, raycasterObjects) {
         });
 
         // Handle camera animations for different objects
-        handleCameraAnimations(object, state, camera);
+        handleCameraAnimations(object, state, camera,controls);
     }
 }
-export function handleCameraAnimations(object, state, camera, modal) {
+export function handleCameraAnimations(object, state, camera, controls) {
     const XAxis = new THREE.Vector3(1, 0, 0);
     if (object.name.includes("Picture")) {
         const objVect = new THREE.Vector3(0, 0.1, 0.7);
@@ -89,12 +89,14 @@ export function handleCameraAnimations(object, state, camera, modal) {
         cameraAnimate(object, objVect, 0, 0, 0, 1, new THREE.Vector3(0, 0, 1.3), state, camera,modals.Education);
     }
     else if (object.name.includes("ScreenBig")) {
-        const objVect = new THREE.Vector3(0, 0, 0);
-        cameraAnimate(object, objVect, 0, 0, 0, 1, new THREE.Vector3(0.4, 0, 1.3), state, camera);
+        const cameraPosition = new THREE.Vector3(3.996363339720619,5.10974612037147, -2.484212515101146);
+        const targetPosition = new THREE.Vector3( 3.35695769929049,5.0716730358333235, -3.9044527120561168);
+        cameraAnimatePosition(state, camera, cameraPosition,controls,targetPosition)
     }
     else if (object.name.includes("ScreenSmall")) {
-        const objVect = new THREE.Vector3(0, 0, 0);
-        cameraAnimate(object, objVect, 0, 0, 0, 1, new THREE.Vector3(-0.3, 0, 1.3), state, camera);
+        const cameraPosition = new THREE.Vector3(5.550240951025817,4.949093159051029,-2.435369062903706);
+        const targetPosition = new THREE.Vector3(6.4062869385630385,4.480498965798785,-4.162776168818836);
+        cameraAnimatePosition(state, camera, cameraPosition,controls,targetPosition)
     }
 }
 

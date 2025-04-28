@@ -30,7 +30,29 @@ export function playHoverAnimation(object, isHovering){
           ease: "back.out(2)",
     })}
 }
+export function cameraAnimatePosition(state,camera,position,controls,target){
+    if(state.isAnimating) return;
 
+    state.isAnimating = true;
+    state.control = false;
+    state.modalView = true;
+    gsap.to(camera.position, {
+        duration: 2,
+        x: position.x,
+        y: position.y,
+        z: position.z, 
+        onUpdate: () => {
+            camera.lookAt(target);
+            
+        },
+        onComplete: () => {
+            controls.target.set(target)
+            state.backButton = "block";
+            state.isAnimating = false;
+        }
+    });
+    
+}
 export function cameraAnimate(mesh,objVect,camX,camY,camZ,dist,offsetDirection,state,camera,modal){
     if(state.isAnimating) return;
 

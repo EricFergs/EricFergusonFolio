@@ -9,6 +9,7 @@ import { createOutlinePass } from './OutlinePass.js';
 import { initComponents } from '../utils/componentLoader.js';
 import { setupEventListeners, handleCameraAnimations, showModal, hideModal, modals} from './eventHandler.js';
 import gsap from "gsap"
+import { outline } from 'three/examples/jsm/tsl/display/OutlineNode.js';
 
 
 initComponents().then(() => {
@@ -79,6 +80,7 @@ const camera = createCamera(sizes);
 const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true});
 renderer.setSize( sizes.width, sizes.height );
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputEncoding = THREE.sRGBEncoding;
 
 const controls = setupControls(camera, renderer);
 const {gltfLoader, textureLoader, environmentMap} = setupLoaders();
@@ -90,7 +92,7 @@ let currentIntersects = [];
 
 
 const { composer, outlinePass } = createOutlinePass(renderer, scene, camera);
-setupEventListeners(state, camera, controls, raycaster, pointer, raycasterObjects, modals,renderer);
+setupEventListeners(state, camera, controls, raycaster, pointer, raycasterObjects, modals,renderer,controls);
 
 
 const textureMap = {
@@ -114,7 +116,7 @@ gltfLoader.load("/models/UpdatedUV.glb", (glb) => {
             Object.keys(textureMap).forEach((key) => {
                 if (child.name.includes(key)){
                     const texture = textureLoader.load(textureMap[key]);
-                    // texture.colorSpace = THREE.SRGBColorSpace
+                    texture.colorSpace = THREE.SRGBColorSpace
                     texture.flipY = false; 
                     const material = new THREE.MeshBasicMaterial({
                         map: texture
@@ -137,6 +139,7 @@ gltfLoader.load("/models/UpdatedUV.glb", (glb) => {
                         picture = child;
                         const myPictureTexture = textureLoader.load('/images/Me.jpg'); 
                         myPictureTexture.flipY = false;
+                        myPictureTexture.colorSpace = THREE.SRGBColorSpace
                         picture.material = new THREE.MeshBasicMaterial({
                             map: myPictureTexture
                         });
@@ -183,8 +186,11 @@ gltfLoader.load("/models/UpdatedUV.glb", (glb) => {
 const render = (timestamp) => {
     if(!state.modalView){
         controls.update();
-    };
-    
+        outlinePass.enabled = true;
+    }else {
+        outlinePass.enabled = false; // Disable OutlinePass when modalView is true
+    }
+
     animateChair(chair,timestamp)
     animateFans(yAxisFans)
     
@@ -192,7 +198,7 @@ const render = (timestamp) => {
     raycaster.setFromCamera( pointer, camera );
 	currentIntersects = raycaster.intersectObjects( raycasterObjects );
 	
-    if(currentIntersects.length>0){
+    if(currentIntersects.length>0 ){
         performHover(currentIntersects,state)
     }else{
         if (state.currentHoveredObject) {
@@ -200,7 +206,8 @@ const render = (timestamp) => {
             state.currentHoveredObject = null;}
         document.body.style.cursor = "default";
     }
-    
+    // console.log("position", camera.position)
+    // console.log(controls.target)
     // renderer.render(scene, camera);
     // To test rendering without the compositor, comment out the composer.render() line.
     composer.render();

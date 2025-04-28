@@ -2,6 +2,8 @@ import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import * as THREE from 'three';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+
 
 export function createOutlinePass(renderer, scene, camera) {
     const composer = new EffectComposer(renderer);
@@ -18,8 +20,15 @@ export function createOutlinePass(renderer, scene, camera) {
     outlinePass.edgeThickness = 2.0; 
     outlinePass.visibleEdgeColor.set('#FFFFFF'); 
     outlinePass.hiddenEdgeColor.set('#FFFFFF'); 
-
     composer.addPass(outlinePass);
+    if (renderer.outputEncoding === THREE.sRGBEncoding) {
+        composer.renderTarget1.texture.encoding = THREE.sRGBEncoding;
+        composer.renderTarget2.texture.encoding = THREE.sRGBEncoding;
+    }
+
+    const outputPass = new OutputPass();
+    composer.addPass(outputPass);
+    
 
     window.addEventListener('resize', () => {
         composer.setSize(window.innerWidth, window.innerHeight);
