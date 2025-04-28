@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import * as THREE from 'three';
+import {showModal, hideModal } from './eventHandler.js';
 
 export function playHoverAnimation(object, isHovering){
     if (!object || !object.userData || !object.userData.initialScale) {
@@ -30,7 +31,7 @@ export function playHoverAnimation(object, isHovering){
     })}
 }
 
-export function cameraAnimate(mesh,objVect,camX,camY,camZ,dist,offsetDirection,state,camera){
+export function cameraAnimate(mesh,objVect,camX,camY,camZ,dist,offsetDirection,state,camera,modal){
     if(state.isAnimating) return;
 
     state.isAnimating = true;
@@ -56,6 +57,7 @@ export function cameraAnimate(mesh,objVect,camX,camY,camZ,dist,offsetDirection,s
         onComplete: () => {
             state.backButton = "block";
             state.isAnimating = false;
+            showModal(modal)
         }
     });
     

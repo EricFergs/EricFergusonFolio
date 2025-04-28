@@ -2,6 +2,13 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { cameraAnimate } from './animations.js';
 
+let activeModal = null; 
+export const modals = {
+    Contact: document.querySelector(".modal.contact"),
+    Frieren: document.querySelector(".frieren.modal"),
+    Aboutme: document.querySelector(".Aboutme.modal"),
+    Education: document.querySelector(".Education.modal")
+};
 
 export function setupEventListeners(state, camera, controls, raycaster, pointer, raycasterObjects, modals, renderer) {
     // Window resize event
@@ -66,20 +73,20 @@ function handleClick(e, state, camera, raycaster, pointer, raycasterObjects) {
         handleCameraAnimations(object, state, camera);
     }
 }
-function handleCameraAnimations(object, state, camera) {
+export function handleCameraAnimations(object, state, camera, modal) {
     const XAxis = new THREE.Vector3(1, 0, 0);
-
     if (object.name.includes("Picture")) {
         const objVect = new THREE.Vector3(0, 0.2, 0.7);
-        cameraAnimate(object, objVect, 0, 0, 0, 1, XAxis, state, camera);
+        console.log("yo",modals.Aboutme)
+        cameraAnimate(object, objVect, 0, 0, 0, 1, XAxis, state, camera, modals.Aboutme);
     }
     else if (object.name.includes("Frieren")) {
         const objVect = new THREE.Vector3(0, 0.8, 0.8);
-        cameraAnimate(object, objVect, 0, 0, 0.3, 1, XAxis, state, camera);
+        cameraAnimate(object, objVect, 0, 0, 0.3, 1, XAxis, state, camera, modals.Frieren);
     }
     else if (object.name.includes("Degree")) {
         const objVect = new THREE.Vector3(0, 0.1, 0);
-        cameraAnimate(object, objVect, 0, 0, 0, 1, new THREE.Vector3(0, 0, 1.3), state, camera);
+        cameraAnimate(object, objVect, 0, 0, 0, 1, new THREE.Vector3(0, 0, 1.3), state, camera,modals.Education);
     }
     else if (object.name.includes("ScreenBig")) {
         const objVect = new THREE.Vector3(0, 0, 0);
@@ -108,12 +115,16 @@ function setupBackButton(state, camera, controls) {
                 z: initialCameraPos.z,
                 onUpdate: () => {
                     camera.lookAt(initialTarget);
+                    if(activeModal){
+                        hideModal(activeModal);
+                    };
                 },
                 onComplete: () => {
                     controls.target.copy(initialTarget);
                     controls.enabled = true;
                     state.modalView = false;
                     state.isAnimating = false;
+                    
                 }
             });
         }
@@ -130,7 +141,7 @@ function setupModalExitButtons() {
 }
 
 export function showModal(modal) {
-    console.log(modal)
+    activeModal = modal; // Set the active modal in the state
     modal.style.display = "block";
 
     gsap.set(modal, { opacity: 0 });
@@ -147,6 +158,7 @@ export function hideModal(modal) {
         duration: 0.5,
         onComplete: () => {
             modal.style.display = "none";
+            activeModal = null;
         }
     });
 }

@@ -32,7 +32,9 @@ export async function loadComponent(filePath, targetElementId) {
     const components = [
       { path: '/components/navigation.html', target: 'navigation-container' },
       { path: '/components/contact.html', target: 'modals-container' },
-      { path: '/components/frieren.html', target: 'frieren-container' }
+      { path: '/components/frieren.html', target: 'frieren-container' },
+      { path: '/components/Aboutme.html', target: 'Aboutme-container' },
+      { path: '/components/Education.html', target: 'Education-container' },
     ];
     
     const loadPromises = components.map(component => 

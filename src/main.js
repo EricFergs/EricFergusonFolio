@@ -7,7 +7,7 @@ import { setupLoaders } from './loaders.js';
 import { playHoverAnimation,performHover, cameraAnimate, animateFans, animateChair } from './animations.js';
 import { createOutlinePass } from './OutlinePass.js';
 import { initComponents } from '../utils/componentLoader.js';
-import { setupEventListeners, showModal, hideModal } from './eventHandler.js';
+import { setupEventListeners, handleCameraAnimations, showModal, hideModal, modals} from './eventHandler.js';
 import gsap from "gsap"
 
 
@@ -15,7 +15,7 @@ initComponents().then(() => {
     initializeExperience();
 });
   
-
+let picture;
 //ModalView is when we're veiwing something and don't want camera controls
 //IsAnimating is so other animation can't play while we're animating
 function initializeExperience() {
@@ -45,14 +45,14 @@ const sizes = {
     height: window.innerHeight
 };
 
+modals.Contact = document.querySelector(".modal.contact")
+modals.Frieren = document.querySelector(".frieren.modal")
+modals.Aboutme = document.querySelector(".Aboutme.modal")
+modals.Education = document.querySelector(".Education.modal")
 
-const modals = {
-    Contact: document.querySelector(".modal.contact"),
-    Frieren: document.querySelector(".frieren.modal")
-};
 const AboutButton = document.getElementById("about_button")
 AboutButton.addEventListener("click",(e)=>{
-    showModal(modals.Frieren)
+    handleCameraAnimations(picture, state, camera);
 })
 const ProjectsButton = document.getElementById("projects_button")
 ProjectsButton.addEventListener("click",(e)=>{
@@ -102,8 +102,8 @@ const textureMap = {
 
 const yAxisFans = [];
 let chair;
-
-
+///models/Empty.glb
+//
 gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
     glb.scene.traverse((child) => {
         if (child.isMesh) {
@@ -135,6 +135,9 @@ gltfLoader.load("/models/Room_Final_Compressed.glb", (glb) => {
                     }
                     if(child.name.includes("LinkedIn")){
                         child.userData.initialScale = new THREE.Vector3().copy(child.scale);
+                    }
+                    if(child.name.includes("Picture")){
+                        picture = child;
                     }
                     if (child.name.includes("Target")) {
                         child.geometry.computeVertexNormals();

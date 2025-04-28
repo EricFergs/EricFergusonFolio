@@ -28,10 +28,10 @@ $border-radius-standard: 2px;
 @mixin left-side {
   position: absolute;
   top: 14%;
-  left: 0;
+  left: 2%;
 }
 @mixin modal-border {
-  border: 2px solid $border-dark;
+  border: 1px solid $border-dark;
   border-radius: $border-radius-standard;
 }
 
@@ -108,7 +108,7 @@ $border-radius-standard: 2px;
   display: none;
   @include modal-border;
   background: $light-bg;
-  text-align: center;
+  text-align: left;
   font-family: "EudoxusSans";
   &-exit-button {
     position: absolute;
@@ -144,12 +144,49 @@ $border-radius-standard: 2px;
   height: 82%;
   font-size: 1.6rem;
 }
+.Aboutme{
+  overflow-y: auto;
+  max-width: 700px;
+  @include left-side;
+  width: 90%;
+  height: 82%;
+  font-size: 1.6rem;
+  padding: 20px;
+  & p {
+    margin: 10px 10px 40px 10px;
+  }
+  & h1 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin: 10px 10px 40px 10px;
+    margin-top:20px
+  }
+}
+.Education{
+  overflow-y: auto;
+  max-width: 700px;
+  @include left-side;
+  width: 90%;
+  height: 82%;
+  font-size: 1.6rem;
+  padding: 20px;
+  & p {
+    margin: 10px 10px 40px 10px;
+  }
+  & h1 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin: 10px 10px 40px 10px;
+    margin-top:20px
+  }
+}
 // Contact modal specific styles
 .contact {
   max-width: 500px;
   @include absolute-center;
   width: 90%;
   font-size: 2.2rem;
+  text-align: center;
   .modal-content {
     height: 170px;
     overflow: visible;
@@ -170,9 +207,7 @@ $border-radius-standard: 2px;
     width: 100px;
     height: 100px;
     cursor: pointer;
-    & {
-      
-    }
+    
   }
 }
 
