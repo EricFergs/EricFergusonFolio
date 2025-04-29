@@ -9,7 +9,7 @@ import { createOutlinePass } from './OutlinePass.js';
 import { initComponents } from '../utils/componentLoader.js';
 import { setupEventListeners, handleCameraAnimations, showModal, hideModal, modals} from './eventHandler.js';
 import gsap from "gsap";
-
+import { Howl } from "howler";
 
 
 initComponents().then(() => {
@@ -20,6 +20,11 @@ let picture;
 let degree;
 let BigMonitor;
 let SmallMonitor;
+const backgroundMusic = new Howl({
+    src: ["/audio/Lukrembo_Marshmallow.mp3"],
+    loop: true,
+    volume: 0.8,
+});
 //ModalView is when we're veiwing something and don't want camera controls
 //IsAnimating is so other animation can't play while we're animating
 function initializeExperience() {
@@ -73,6 +78,7 @@ manager.onLoad = function () {
             duration: 1.5,
             onComplete: () => {
                 loadingScreen.style.display = "none";
+                backgroundMusic.play();
             }
         })
     }
