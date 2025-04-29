@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import gsap from 'gsap';
 import { cameraAnimate, cameraAnimatePosition } from './animations.js';
 
-let activeModal = null; 
+export let activeModal = null; 
 export const modals = {
     Contact: document.querySelector(".modal.contact"),
     Frieren: document.querySelector(".frieren.modal"),

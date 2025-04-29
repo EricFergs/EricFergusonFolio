@@ -7,7 +7,7 @@ import { setupLoaders } from './loaders.js';
 import { playHoverAnimation,performHover, cameraAnimate, animateFans, animateChair } from './animations.js';
 import { createOutlinePass } from './OutlinePass.js';
 import { initComponents } from '../utils/componentLoader.js';
-import { setupEventListeners, handleCameraAnimations, showModal, hideModal, modals} from './eventHandler.js';
+import { setupEventListeners, handleCameraAnimations, showModal, hideModal, modals,activeModal} from './eventHandler.js';
 import gsap from "gsap";
 import { Howl } from "howler";
 
@@ -120,22 +120,37 @@ modals.Project = document.querySelector(".Project.modal")
 
 const AboutButton = document.getElementById("about_button");
 AboutButton.addEventListener("click",(e)=>{
+    if(state.modalView){
+        hideModal(activeModal);
+    }
     handleCameraAnimations(picture, state, camera);
 })
 const ProjectsButton = document.getElementById("projects_button");
 ProjectsButton.addEventListener("click",(e)=>{
+    if(state.modalView){
+        hideModal(activeModal);
+    }
     handleCameraAnimations(BigMonitor, state, camera,controls);
 })
 const ExperienceButton = document.getElementById("experiece_button");
 ExperienceButton.addEventListener("click",(e)=>{
+    if(state.modalView){
+        hideModal(activeModal);
+    }
     handleCameraAnimations(SmallMonitor, state, camera,controls);
 })
 const EducationButton = document.getElementById("education_button");
 EducationButton.addEventListener("click",(e)=>{
+    if(state.modalView){
+        hideModal(activeModal);
+    }
     handleCameraAnimations(degree, state, camera);
 })
 const contactButton = document.getElementById("contact_button");
 contactButton.addEventListener("click",(e)=>{
+    if(state.modalView){
+        hideModal(activeModal);
+    }
     showModal(modals.Contact);
 })
 
