@@ -81,7 +81,9 @@ manager.onLoad = function () {
             duration: 1.5,
             onComplete: () => {
                 loadingScreen.style.display = "none";
-                backgroundMusic.play();
+                if (!backgroundMusic.playing()) { // Check if the music is already playing
+                    backgroundMusic.play();
+                }
             }
         })
     }
