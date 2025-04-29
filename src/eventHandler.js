@@ -7,7 +7,9 @@ export const modals = {
     Contact: document.querySelector(".modal.contact"),
     Frieren: document.querySelector(".frieren.modal"),
     Aboutme: document.querySelector(".Aboutme.modal"),
-    Education: document.querySelector(".Education.modal")
+    Education: document.querySelector(".Education.modal"),
+    Experience: document.querySelector(".Experience.modal"),
+    Project: document.querySelector(".Project.modal")
 };
 
 export function setupEventListeners(state, camera, controls, raycaster, pointer, raycasterObjects, modals, renderer) {
@@ -91,12 +93,12 @@ export function handleCameraAnimations(object, state, camera, controls) {
     else if (object.name.includes("ScreenBig")) {
         const cameraPosition = new THREE.Vector3(3.996363339720619,5.10974612037147, -2.484212515101146);
         const targetPosition = new THREE.Vector3( 3.35695769929049,5.0716730358333235, -3.9044527120561168);
-        cameraAnimatePosition(state, camera, cameraPosition,controls,targetPosition)
+        cameraAnimatePosition(state, camera, cameraPosition,controls,targetPosition,modals.Project)
     }
     else if (object.name.includes("ScreenSmall")) {
         const cameraPosition = new THREE.Vector3(5.550240951025817,4.949093159051029,-2.435369062903706);
         const targetPosition = new THREE.Vector3(6.4062869385630385,4.480498965798785,-4.162776168818836);
-        cameraAnimatePosition(state, camera, cameraPosition,controls,targetPosition)
+        cameraAnimatePosition(state, camera, cameraPosition,controls,targetPosition,modals.Experience)
     }
 }
 

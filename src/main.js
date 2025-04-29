@@ -8,8 +8,7 @@ import { playHoverAnimation,performHover, cameraAnimate, animateFans, animateCha
 import { createOutlinePass } from './OutlinePass.js';
 import { initComponents } from '../utils/componentLoader.js';
 import { setupEventListeners, handleCameraAnimations, showModal, hideModal, modals} from './eventHandler.js';
-import gsap from "gsap"
-import { outline } from 'three/examples/jsm/tsl/display/OutlineNode.js';
+
 
 
 initComponents().then(() => {
@@ -18,6 +17,8 @@ initComponents().then(() => {
   
 let picture;
 let degree;
+let BigMonitor;
+let SmallMonitor;
 //ModalView is when we're veiwing something and don't want camera controls
 //IsAnimating is so other animation can't play while we're animating
 function initializeExperience() {
@@ -51,6 +52,8 @@ modals.Contact = document.querySelector(".modal.contact");
 modals.Frieren = document.querySelector(".frieren.modal");
 modals.Aboutme = document.querySelector(".Aboutme.modal");
 modals.Education = document.querySelector(".Education.modal");
+modals.Experience = document.querySelector(".Experience.modal");
+modals.Project = document.querySelector(".Project.modal")
 
 const AboutButton = document.getElementById("about_button");
 AboutButton.addEventListener("click",(e)=>{
@@ -58,11 +61,11 @@ AboutButton.addEventListener("click",(e)=>{
 })
 const ProjectsButton = document.getElementById("projects_button");
 ProjectsButton.addEventListener("click",(e)=>{
-    showModal(modals.Contact);
+    handleCameraAnimations(BigMonitor, state, camera);
 })
 const ExperienceButton = document.getElementById("experiece_button");
 ExperienceButton.addEventListener("click",(e)=>{
-    showModal(modals.Contact);
+    handleCameraAnimations(SmallMonitor, state, camera);
 })
 const EducationButton = document.getElementById("education_button");
 EducationButton.addEventListener("click",(e)=>{
@@ -100,7 +103,7 @@ const textureMap = {
     Two: "/textures/TrueBakeTwo.webp",
     Three: "/textures/TrueBakeThree.webp",
     Four: "/textures/TrueBakeFour.webp",
-    Background: "/textures/TrueBakeFive.webp"
+    Background: "/textures/TrueBakeFive.webp",
 };
 
 const yAxisFans = [];
@@ -127,6 +130,12 @@ gltfLoader.load("/models/UpdatedUV.glb", (glb) => {
                     }
                     if(child.name.includes("Fan")){
                         yAxisFans.push(child)
+                    }
+                    if(child.name.includes("ScreenBig")){
+                        BigMonitor = child;
+                    }
+                    if(child.name.includes("ScreenSmall")){
+                        SmallMonitor = child;
                     }
                     if(child.name.includes("Chair")){
                         chair = child

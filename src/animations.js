@@ -30,9 +30,8 @@ export function playHoverAnimation(object, isHovering){
           ease: "back.out(2)",
     })}
 }
-export function cameraAnimatePosition(state,camera,position,controls,target){
+export function cameraAnimatePosition(state,camera,position,controls,target, modal){
     if(state.isAnimating) return;
-
     state.isAnimating = true;
     state.control = false;
     state.modalView = true;
@@ -49,6 +48,7 @@ export function cameraAnimatePosition(state,camera,position,controls,target){
             controls.target.set(target)
             state.backButton = "block";
             state.isAnimating = false;
+            showModal(modal)
         }
     });
     
