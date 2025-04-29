@@ -30,6 +30,7 @@ export function playHoverAnimation(object, isHovering){
           ease: "back.out(2)",
     })}
 }
+//cameraAnimatePosition(state, camera, cameraPosition,controls,targetPosition,modals.Project)
 export function cameraAnimatePosition(state,camera,position,controls,target, modal){
     if(state.isAnimating) return;
     state.isAnimating = true;

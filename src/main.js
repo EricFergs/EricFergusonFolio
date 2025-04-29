@@ -48,34 +48,6 @@ const sizes = {
     height: window.innerHeight
 };
 
-modals.Contact = document.querySelector(".modal.contact");
-modals.Frieren = document.querySelector(".frieren.modal");
-modals.Aboutme = document.querySelector(".Aboutme.modal");
-modals.Education = document.querySelector(".Education.modal");
-modals.Experience = document.querySelector(".Experience.modal");
-modals.Project = document.querySelector(".Project.modal")
-
-const AboutButton = document.getElementById("about_button");
-AboutButton.addEventListener("click",(e)=>{
-    handleCameraAnimations(picture, state, camera);
-})
-const ProjectsButton = document.getElementById("projects_button");
-ProjectsButton.addEventListener("click",(e)=>{
-    handleCameraAnimations(BigMonitor, state, camera);
-})
-const ExperienceButton = document.getElementById("experiece_button");
-ExperienceButton.addEventListener("click",(e)=>{
-    handleCameraAnimations(SmallMonitor, state, camera);
-})
-const EducationButton = document.getElementById("education_button");
-EducationButton.addEventListener("click",(e)=>{
-    handleCameraAnimations(degree, state, camera);
-})
-const contactButton = document.getElementById("contact_button");
-contactButton.addEventListener("click",(e)=>{
-    showModal(modals.Contact);
-})
-   
 
 
 const scene = createScene();
@@ -92,6 +64,35 @@ const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const raycasterObjects = [];
 let currentIntersects = [];
+
+modals.Contact = document.querySelector(".modal.contact");
+modals.Frieren = document.querySelector(".frieren.modal");
+modals.Aboutme = document.querySelector(".Aboutme.modal");
+modals.Education = document.querySelector(".Education.modal");
+modals.Experience = document.querySelector(".Experience.modal");
+modals.Project = document.querySelector(".Project.modal")
+
+const AboutButton = document.getElementById("about_button");
+AboutButton.addEventListener("click",(e)=>{
+    handleCameraAnimations(picture, state, camera);
+})
+const ProjectsButton = document.getElementById("projects_button");
+ProjectsButton.addEventListener("click",(e)=>{
+    handleCameraAnimations(BigMonitor, state, camera,controls);
+})
+const ExperienceButton = document.getElementById("experiece_button");
+ExperienceButton.addEventListener("click",(e)=>{
+    handleCameraAnimations(SmallMonitor, state, camera,controls);
+})
+const EducationButton = document.getElementById("education_button");
+EducationButton.addEventListener("click",(e)=>{
+    handleCameraAnimations(degree, state, camera);
+})
+const contactButton = document.getElementById("contact_button");
+contactButton.addEventListener("click",(e)=>{
+    showModal(modals.Contact);
+})
+   
 
 
 const { composer, outlinePass } = createOutlinePass(renderer, scene, camera);
