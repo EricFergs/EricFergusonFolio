@@ -8,6 +8,7 @@ import { playHoverAnimation,performHover, cameraAnimate, animateFans, animateCha
 import { createOutlinePass } from './OutlinePass.js';
 import { initComponents } from '../utils/componentLoader.js';
 import { setupEventListeners, handleCameraAnimations, showModal, hideModal, modals} from './eventHandler.js';
+import gsap from "gsap";
 
 
 
@@ -57,8 +58,44 @@ renderer.setSize( sizes.width, sizes.height );
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.outputEncoding = THREE.sRGBEncoding;
 
+const manager = new THREE.LoadingManager();
+const loadingScreen = document.querySelector(".loading-screen");
+const loadingScreenButton = document.querySelector(".loading-screen-button");
+manager.onLoad = function () {
+    //loadingScreenButton.textContent = "Loaded";
+    loadingScreenButton.style.background = "#3673b0";
+    loadingScreenButton.style.color = "#e6dede";
+    loadingScreenButton.style.boxShadow = "rgba(0, 0, 0, 0.24) 0px 3px 8px";
+    loadingScreenButton.textContent = "Enter!";
+    function handleEnter(){
+        gsap.to(loadingScreen, {
+            opacity: 0,
+            duration: 1.5,
+            onComplete: () => {
+                loadingScreen.style.display = "none";
+            }
+        })
+    }
+    // 
+    loadingScreenButton.addEventListener("mouseenter", () => {
+        loadingScreenButton.style.transform = "scale(1.3)";
+    });
+    
+    
+    loadingScreenButton.addEventListener("click", (e) => {
+        handleEnter();
+    });
+    
+    loadingScreenButton.addEventListener("mouseleave", () => {
+        loadingScreenButton.style.transform = "scale(1)";
+    });
+     
+};
+
+
+
 const controls = setupControls(camera, renderer);
-const {gltfLoader, textureLoader, environmentMap} = setupLoaders();
+const {gltfLoader, textureLoader, environmentMap} = setupLoaders(manager);
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -110,6 +147,9 @@ const textureMap = {
 const yAxisFans = [];
 let chair;
 const scaleTargets = ["Frieren", "Github", "LinkedIn","Jigglypuff","Jirachi","Mouse","Headphones","Switch"];
+
+
+
 
 ///models/Empty.glb
 //
