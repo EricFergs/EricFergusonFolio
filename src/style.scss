@@ -396,6 +396,34 @@ b {
   visibility: visible;
   opacity: 1;
 }
+.mute-button {
+  position: absolute;
+  display: block;
+  top: 100px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  opacity: 1;
+  border-radius: 50%;
+  background-color: $primary-color;
+  text-align: center;
+  line-height: 100px;
+  text-decoration: none;
+  visibility: visible;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: $box-shadow;
+  z-index: 9999;
+  background-image: url("../public/images/audio.svg");
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 1s, visibility 1s, background-size $transition-standard;
+  
+  &:hover {
+    background-size: 75%;
+  }
+}
 body {
   --sb-track-color: $light-bg;
   --sb-thumb-color: $primary-color;

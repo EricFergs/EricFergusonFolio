@@ -20,10 +20,13 @@ let picture;
 let degree;
 let BigMonitor;
 let SmallMonitor;
+// Music track: stroll by massobeats
+// Source: https://freetouse.com/music
+// Free Background Music for Videos
 const backgroundMusic = new Howl({
-    src: ["/audio/Lukrembo_Marshmallow.mp3"],
+    src: ["/audio/Stroll.mp3"],
     loop: true,
-    volume: 0.8,
+    volume: 0.6,
 });
 //ModalView is when we're veiwing something and don't want camera controls
 //IsAnimating is so other animation can't play while we're animating
@@ -135,7 +138,21 @@ const contactButton = document.getElementById("contact_button");
 contactButton.addEventListener("click",(e)=>{
     showModal(modals.Contact);
 })
-   
+
+let muted = false;
+const muteButton = document.querySelector(".mute-button");
+muteButton.addEventListener("click",(e)=>{
+    if (muted){
+        backgroundMusic.volume(0.6);
+        muteButton.style.backgroundImage = "url('/images/audio.svg')";
+        muted = false;
+    }
+    else{
+        backgroundMusic.volume(0);
+        muteButton.style.backgroundImage = "url('/images/noaudio.svg')";
+        muted = true;
+    }
+})
 
 
 const { composer, outlinePass } = createOutlinePass(renderer, scene, camera);
